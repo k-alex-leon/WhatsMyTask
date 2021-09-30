@@ -1,0 +1,154 @@
+package com.example.whatsmytask.adapters;
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.whatsmytask.R;
+import com.example.whatsmytask.models.Friend;
+import com.example.whatsmytask.models.User;
+import com.example.whatsmytask.providers.AuthProvider;
+import com.example.whatsmytask.providers.FriendsProvider;
+import com.example.whatsmytask.providers.UsersProvider;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
+
+import org.jetbrains.annotations.NotNull;
+
+public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFriendsAdapter.ViewHolder> {
+    Context context;
+    UsersProvider mUserProvider;
+    FriendsProvider mFriendProvider;
+    AuthProvider mAuthProvider;
+
+    public UserFriendsAdapter(FirestoreRecyclerOptions<User> options, Context context){
+        super(options);
+        this.context = context;
+        mUserProvider = new UsersProvider();
+    }
+
+    @Override
+    protected void onBindViewHolder(@NotNull UserFriendsAdapter.ViewHolder holder, int position,@NotNull User user) {
+        DocumentSnapshot document = getSnapshots().getSnapshot(position);
+        final String friendId = document.getId();
+        getFriendInfo(friendId, holder);
+    }
+
+    private void getFriendInfo(String friendId, ViewHolder holder) {
+        mUserProvider.getUser(friendId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    if (documentSnapshot.contains("userName")){
+                        String userName = documentSnapshot.getString("userName");
+                        holder.textViewNameFriend.setText(userName.toUpperCase());
+                    }
+                    if(documentSnapshot.contains("email")){
+                        String email = documentSnapshot.getString("email");
+                        holder.textViewEmailFriend.setText(email);
+                    }
+                    if (documentSnapshot.contains("imageProfile")){
+                        String imageProfile = documentSnapshot.getString("imageProfile");
+                        if (imageProfile != null){
+                            if (!imageProfile.isEmpty()){
+                                Picasso.with(context).load(imageProfile).into(holder.mImageProfileViewFriend);
+                            }
+                        }
+                    }
+                }
+                holder.mImageViewDeleteFriend.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showConfirmDeleteFriend(friendId);
+                    }
+                });
+            }
+        });
+    }
+
+    // Confirmar por alert dialog eliminar amigo
+    private void showConfirmDeleteFriend(String friendId) {
+        new AlertDialog.Builder(context)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Delete friend")
+                .setMessage("Do you want delete this person?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteFriend(friendId);
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    // Metodo para borrar amigo
+    private void deleteFriend(String friendId) {
+        Friend friend = new Friend();
+        friend.setIdUser1(mAuthProvider.getUid());
+        friend.setIdUser2(friendId);
+        mFriendProvider.deleteFriendByIdUser1(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    mFriendProvider.deleteFriendByIdUser2(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull @NotNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                Toast.makeText(context, "Friend deleted", Toast.LENGTH_LONG).show();
+                            }else{
+                                Toast.makeText(context, "Error erasing friend", Toast.LENGTH_LONG).show();
+                            }
+
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(context, "Error erasing friend", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+
+    @NotNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_user_friends,parent, false);
+        return new ViewHolder(view);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+
+        TextView textViewNameFriend;
+        TextView textViewEmailFriend;
+        ImageView mImageProfileViewFriend;
+        ImageView mImageViewDeleteFriend;
+
+        public ViewHolder(View view){
+            super(view);
+            textViewNameFriend = view.findViewById(R.id.textViewUserFriend);
+            textViewEmailFriend = view.findViewById(R.id.textViewUserFriendEmail);
+            mImageProfileViewFriend = view.findViewById(R.id.imageUserFriendProfile);
+            mImageViewDeleteFriend = view.findViewById(R.id.imageViewDeleteUserFriend);
+
+            mFriendProvider = new FriendsProvider();
+            mAuthProvider = new AuthProvider();
+        }
+    }
+}

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EditProfileActivity">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/black"/>
+
+    <!--
+    android:alpha="0.7" , junto al view con backgorund black
+    da transparencia y opacidad a la img
+     -->
+    <ImageView
+        android:id="@+id/imageViewCover"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/notepaper"
+        android:scaleType="centerCrop"
+        android:alpha="0.8"
+        android:transitionName="@string/transition_picture"
+        />
+
+
+        <RelativeLayout
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center|top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageProfile"
+                android:layout_width="140dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:layout_height="140dp"
+                android:src="@drawable/ic_person"
+                app:civ_circle_background_color="@color/gray"
+                android:layout_marginTop="100dp"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="5dp"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/circleImageProfile"
+                android:src="@drawable/ic_edit"
+                app:civ_border_color="@color/white" />
+        </RelativeLayout>
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="230dp">
+
+
+        <!--
+            INPUT EDIT USER NAME
+            -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@drawable/ic_person_gray"
+                android:layout_marginTop="12dp"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/textInputEditUserName"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:hint="User name"
+                    android:inputType="text"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+        </LinearLayout>
+
+        <!--
+            INPUT EDIT PHONE NUMBER
+            -->
+
+    </LinearLayout>
+
+    <!--
+             BUTTON LOGIN
+             -->
+    <Button
+        android:id="@+id/btnEditProfile"
+        android:backgroundTint="@color/light_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="UPDATE"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="17dp"
+        android:layout_gravity="bottom"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circleImageBack"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_arrow_back"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="15dp"
+        />
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

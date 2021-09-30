@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.whatsmytask">
+    <!-- PERMISO PARA ACCEDER A INTERNET -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_wmticon"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.WhatsMyTask">
+        <activity android:name=".activities.AddFriendActivity" />
+        <activity android:name=".activities.TaskEditActivity" />
+        <activity android:name=".activities.EditProfileActivity" />
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.NewTaskActivity" />
+        <activity android:name=".activities.CompleteProfileActivity" />
+        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- Servicio implementado para las noti -->
+
+        <receiver android:name=".utils.AlertReceiver"/>
+
+        <service
+            android:name=".services.MyFirebaseMessagingClient"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+    </application>
+
+</manifest>

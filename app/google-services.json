@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1009141581459",
+    "project_id": "what-s-my-task",
+    "storage_bucket": "what-s-my-task.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1009141581459:android:cc248d1e720f7772f16f66",
+        "android_client_info": {
+          "package_name": "com.example.whatsmytask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1009141581459-btna2fmctck0gbhumgbv0ll2c6f2er4v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBilFrxlde7uYn8eKrWIdFfMydy3S3nyGs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1009141581459-btna2fmctck0gbhumgbv0ll2c6f2er4v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
