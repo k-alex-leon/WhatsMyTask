@@ -17,14 +17,12 @@
         REGISTER BOX
         -->
 
-        <com.github.florent37.shapeofview.shapes.ArcView
+        <io.github.florent37.shapeofview.shapes.ArcView
             android:layout_width="match_parent"
-            android:layout_height="215dp"
+            android:layout_height="200dp"
             android:elevation="4dp"
-            app:shape_arc_cropDirection="outside"
             app:shape_arc_height="20dp"
-            app:shape_arc_position="bottom"
-            >
+            app:shape_arc_position="bottom">
 
             <View
                 android:layout_width="match_parent"
@@ -52,7 +50,7 @@
                     />
 
             </LinearLayout>
-        </com.github.florent37.shapeofview.shapes.ArcView>
+        </io.github.florent37.shapeofview.shapes.ArcView>
 
         <!--
         INPUT USER NAME

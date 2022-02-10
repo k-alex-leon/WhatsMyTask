@@ -46,7 +46,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
+
 
 public class NewTaskActivity extends AppCompatActivity{
 
@@ -68,7 +68,7 @@ public class NewTaskActivity extends AppCompatActivity{
     ItemChecked itemChecked;
     ArrayList<String> friendsId;
     //le muestra al usuario que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    // AlertDialog mDialog;
 
     TaskFriendAdapter mTaskFriendAdapter;
     FriendsProvider mFriendsProvider;
@@ -106,10 +106,7 @@ public class NewTaskActivity extends AppCompatActivity{
         mDialogPopup = new Dialog(this);
 
         // cuadro de carga (ALERT DIALOG)
-        mDialog = new SpotsDialog.Builder()
-                .setContext(this)
-                .setMessage("Loading")
-                .setCancelable(false).build();
+
 
         // IMGVIEW QUE ABRE EL CALENDARIO
         mTaskDate.setOnClickListener(v -> openCalendar());
@@ -235,7 +232,7 @@ public class NewTaskActivity extends AppCompatActivity{
         if(!mTitleTask.isEmpty() && !mDescriptionTask.isEmpty()
                 && !dateT.isEmpty() && !mEtHour.equals("")){
 
-            mDialog.show();
+            // mDialog.show();
             createTask(friendsId);
 
         }
@@ -252,8 +249,6 @@ public class NewTaskActivity extends AppCompatActivity{
     private void createTask(ArrayList friendsId) {
 
         // agrego el idUser al array para despues llamarlo desde el fragment
-
-
 
         TaskU taskU = new TaskU();
         taskU.setTitleTask(mTitleTask);
@@ -274,13 +269,12 @@ public class NewTaskActivity extends AppCompatActivity{
             public void onComplete(@NonNull Task<Void> taskSave) {
 
                 if(taskSave.isSuccessful()){
-                    mDialog.dismiss();
+                    // mDialog.dismiss();
                     clearForm();
                     Toast.makeText(NewTaskActivity.this, "Task save", Toast.LENGTH_SHORT).show();
 
-
                 }else{
-                    mDialog.dismiss();
+                    // mDialog.dismiss();
                     Toast.makeText(NewTaskActivity.this, "Error saving task", Toast.LENGTH_SHORT).show();
                 }
             }

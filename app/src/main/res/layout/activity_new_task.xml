@@ -7,309 +7,248 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.NewTaskActivity">
 
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginBottom="200dp"
+            android:background="@drawable/bakgroundtask">
 
-            <!--
-            REGISTER BOX
-            -->
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_add_new_task"/>
 
-            <com.github.florent37.shapeofview.shapes.ArcView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageBackTask"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="left|top"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_arrow_back" />
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="200dp"
+            app:cardCornerRadius="15dp">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:elevation="4dp"
-                app:shape_arc_cropDirection="outside"
-                app:shape_arc_height="20dp"
-                app:shape_arc_position="bottom"
-                >
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <View
+                <Button
+                    android:id="@+id/btnSaveTask"
+                    android:backgroundTint="@color/light_blue"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/light_blue"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circleImageBackTask"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/ic_arrow_back"
-                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content"
+                    android:text="Save"
+                    android:textColor="@color/white"
                     android:layout_marginLeft="15dp"
-                    />
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="20dp"
+                    android:textSize="17dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="NEW TASK"
-                        android:textColor="@color/design_default_color_on_primary"
-                        android:textAlignment="center"
-                        android:textSize="30dp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="20dp"
-                        />
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
+
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:src="@drawable/ic_add_new_task"
-                        />
-
-                </LinearLayout>
-            </com.github.florent37.shapeofview.shapes.ArcView>
-
-            <!--
-            INPUT TASK TITLE
-            -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="60dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@drawable/ic_add_task"
-                    android:layout_marginTop="12dp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp">
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="12dp"
+                        android:src="@drawable/ic_add_task" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textInputTaskTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:hint="Title"
-                        android:inputType="text"/>
+                        android:inputType="text" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
-
-            </LinearLayout>
-
-            <!--
-            INPUT DESCRIPTION TASK
-            -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@drawable/ic_text_snippet"
-                    android:layout_marginTop="12dp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp">
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="12dp"
+                        android:src="@drawable/ic_text_snippet" />
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/textInputDescriptionTask"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:hint="Description"
                         android:inputType="textMultiLine"
-                        android:maxLength="200"
-                        />
+                        android:maxLength="200" />
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-                <!--
-                DATE PICK DIALOG
-            -->
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="left|center"
+                    android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:layout_marginLeft="25dp">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/taskDate"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="13dp"
-                        android:src="@drawable/ic_calendar"
-                        />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Date"
-                            android:textSize="18dp"
-                            />
-
-                        <TextView
-                            android:id="@+id/etDate"
-                            android:layout_width="120dp"
-                            android:layout_height="40dp"
-                            android:textSize="20dp"
-                            />
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
-                <!--
-                    HOUR PICK DIALOG
+                    <!--
+                    DATE PICK DIALOG
                 -->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="right|center"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="50dp">
-
-                    <ImageView
-                        android:id="@+id/taskHour"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="13dp"
-                        android:src="@drawable/ic_alarm"
-                        />
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
+                        android:layout_gravity="left|center"
+                        android:layout_marginLeft="25dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/taskDate"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="13dp"
+                            android:src="@drawable/ic_calendar" />
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Hour"
-                            android:textSize="18dp"
-                            />
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/etHour"
-                            android:layout_width="100dp"
-                            android:layout_height="40dp"
-                            android:textSize="20dp"
-                            />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Date"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:id="@+id/etDate"
+                                android:layout_width="120dp"
+                                android:layout_height="40dp"
+                                android:textSize="20dp" />
+
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
 
+                    <!--
+                        HOUR PICK DIALOG
+                    -->
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="15dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/taskHour"
+                            android:layout_width="45dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="13dp"
+                            android:src="@drawable/ic_alarm" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Hour"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:id="@+id/etHour"
+                                android:layout_width="100dp"
+                                android:layout_height="40dp"
+                                android:textSize="20dp" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/imageViewAddFriendTask"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_add_person_gray" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            >
+                    <TextView
+                        android:id="@+id/txtFriendsSelected"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="20dp"
+                        android:text="Add friends" />
 
-            <ImageView
-                android:id="@+id/imageViewAddFriendTask"
-                android:src="@drawable/ic_add_person_gray"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtFriendsSelected"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="12dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Add friends"/>
-
-        </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearRecyclerFriends"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerHideFriends"
+                <LinearLayout
+                    android:id="@+id/linearRecyclerFriends"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerHideFriends"
+                        android:layout_width="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!--
-            BUTTON LOGIN
-            -->
-            <Button
-                android:id="@+id/btnSaveTask"
-                android:backgroundTint="@color/light_blue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save"
-                android:layout_marginTop="70dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="20dp"
-                android:textSize="17dp"
-                android:layout_gravity="bottom"
-                />
+        </androidx.cardview.widget.CardView>
 
-
-
-
-
-            <!-- /!!! -->
-        </LinearLayout>
-
+    </RelativeLayout>
 
     </ScrollView>
-
-
-
 
 
 
