@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.HomeFragment"
-    android:layout_marginBottom="50dp"
-    >
+    android:layout_marginBottom="50dp">
 
     <!-- AGREGA EL TOOLBAR AL FRAGMENT -->
     <include layout="@layout/action_bar_toolbar"/>
@@ -24,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background"/>
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

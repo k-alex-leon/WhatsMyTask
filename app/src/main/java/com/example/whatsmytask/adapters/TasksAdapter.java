@@ -46,6 +46,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -76,7 +77,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         final String TaskId = document.getId();
 
 
-        holder.textViewTitle.setText(taskU.getTitleTask());
+        holder.textViewTitle.setText(taskU.getTitleTask().toUpperCase(Locale.ROOT));
         holder.textViewDescription.setText(taskU.getDescriptionTask());
         holder.textViewDate.setText(taskU.getDateTask());
         holder.textViewHour.setText(taskU.getHourTask());

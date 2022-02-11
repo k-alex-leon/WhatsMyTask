@@ -5,6 +5,7 @@
     <item android:id="@+id/itmeSession"
         android:title="Profile"
         app:showAsAction="never"/>
+
     <item android:id="@+id/itemLogout"
         android:title="Sign out"
         app:showAsAction="never"/>

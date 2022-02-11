@@ -10,19 +10,18 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container"
-        >
+        android:id="@+id/container">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/light_blue"
+            android:background="@color/blue"
             app:itemIconTint="@color/white"
             app:itemTextColor="@color/white"
-            app:menu="@menu/bottom_navigation_menu"
-            />
+            app:menu="@menu/bottom_navigation_menu"/>
+
     </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

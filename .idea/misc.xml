@@ -8,6 +8,7 @@
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/drawable/ic_arrow_back.xml" value="0.19895833333333332" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/drawable/ic_logout_black.xml" value="0.19895833333333332" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/action_bar_toolbar.xml" value="0.1828125" />
+        <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/action_toolbar.xml" value="0.1828125" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/activity_complete_profile.xml" value="0.1828125" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/activity_edit_profile.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/activity_home.xml" value="0.1828125" />
@@ -16,7 +17,7 @@
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/activity_session.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/activity_task_edit.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/cardview_friend_task.xml" value="0.1828125" />
-        <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/cardview_task.xml" value="0.1" />
+        <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/cardview_task.xml" value="0.22" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/cardview_user_friends.xml" value="0.1" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/fragment_dashboard.xml" value="0.1828125" />
         <entry key="..\:/AndroidProjects/WhatsMyTask/app/src/main/res/layout/fragment_home.xml" value="0.1828125" />

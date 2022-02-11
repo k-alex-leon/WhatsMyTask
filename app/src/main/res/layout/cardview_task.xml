@@ -13,90 +13,81 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:background="@color/darkGray">
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:background="@color/teal_200">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:padding="6dp">
+            android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/imageViewEditTask"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:src="@drawable/ic_edit"/>
+            <ImageView
+                android:id="@+id/imageViewEditTask"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_edit"/>
 
+        </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_toEndOf="@+id/imageViewEditTask"
-                android:orientation="vertical"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@+id/imageViewEditTask">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="left|center">
 
-                <TextView
-                    android:id="@+id/textViewTitlePostCard"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:text="TITLE OF TASK"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textViewTitlePostCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:text="TITLE OF TASK"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
-                <TextView
-                    android:id="@+id/textViewDescriptionPostCard"
-                    android:layout_width="240dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="2dp"
-                    android:maxLines="2"
-                    android:text="Description of task"/>
+        <TextView
+            android:id="@+id/textViewDescriptionPostCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:maxLines="2"
+            android:textSize="15dp"
+            android:textColor="@color/white"
+            android:text="Description of task"/>
 
-            </LinearLayout>
+    </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical"
-                    android:layout_marginRight="6dp"
-                    android:gravity="center">
+        <CheckBox
+            android:id="@+id/checkboxTask"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"/>
 
-                    <TextView
-                        android:id="@+id/textViewHourPostCard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hour"/>
+        <TextView
+            android:id="@+id/textViewHourPostCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Hour"/>
 
-                    <TextView
-                        android:id="@+id/textViewDatePostCard"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Date"
-                        android:textSize="15dp"
-                        android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/textViewDatePostCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"/>
 
-                </LinearLayout>
-
-            <CheckBox
-                android:id="@+id/checkboxTask"
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"/>
-
-
-        </RelativeLayout>
+    </LinearLayout>
 
     </LinearLayout>
 
