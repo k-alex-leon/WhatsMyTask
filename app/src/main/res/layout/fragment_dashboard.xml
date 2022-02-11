@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".fragments.DashboardFragment">
-
-    <include layout="@layout/action_bar_toolbar"/>
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -20,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@color/gray">
+        android:background="@color/darkGray">
 
         <TextView
             android:layout_centerVertical="true"
@@ -86,7 +85,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/gray"
+        android:background="@color/darkGray"
         android:orientation="horizontal">
 
 

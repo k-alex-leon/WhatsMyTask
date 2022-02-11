@@ -84,9 +84,6 @@ public class DashboardFragment extends Fragment {
         mAuthProvider = new AuthProvider();
 
         mView = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        mToolbar = mView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dashboard");
 
         textViewTaskSize = mView.findViewById(R.id.allTaskSize);
         textViewPendingTaskSize = mView.findViewById(R.id.pendingTaskSize);

@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.whatsmytask.R;
@@ -35,6 +38,9 @@ public class OurTasksFragment extends Fragment {
     RecyclerView mRecyclerView;
     TaskProvider mTaskProvider;
     TasksAdapter mTaskAdapter;
+    LinearLayout mLinearLMenuTop;
+    ImageView mImgVMenuMore;
+    Boolean mIsMenuOpen;
 
     public OurTasksFragment() {
         // Required empty public constructor
@@ -64,18 +70,37 @@ public class OurTasksFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_our_tasks, container, false);
-        mToolbar = mView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Our tasks");
+
         mAuthProvider = new AuthProvider();
         mTaskProvider = new TaskProvider();
-        mRecyclerView = mView.findViewById(R.id.recyclerOurTask);
 
+        mRecyclerView = mView.findViewById(R.id.recyclerOurTask);
         //LinearLayoutManager = muestra las cardview una debajo de la otra
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mLinearLMenuTop = mView.findViewById(R.id.lLyMenuTop);
+
+        mImgVMenuMore = mView.findViewById(R.id.menuMore);
+        mImgVMenuMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mIsMenuOpen = true;
+                showMenu();
+            }
+        });
+
         return mView;
     }
+
+    private void showMenu() {
+        if (mIsMenuOpen){
+            mLinearLMenuTop.setVisibility(View.VISIBLE);
+        }else if (mImgVMenuMore.isClickable()){
+            mIsMenuOpen = false;
+        }
+    }
+
 
     @Override
     public void onStart() {
@@ -95,6 +120,12 @@ public class OurTasksFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        mTaskAdapter.stopListening();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         mTaskAdapter.stopListening();
     }
 }

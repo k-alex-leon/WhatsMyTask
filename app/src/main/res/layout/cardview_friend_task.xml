@@ -43,8 +43,7 @@
                 android:layout_toEndOf="@+id/imageUserFriendProfile"
                 android:orientation="vertical"
                 android:layout_marginLeft="8dp"
-                android:layout_toRightOf="@+id/imageUserFriendProfile"
-                >
+                android:layout_toRightOf="@+id/imageUserFriendProfile">
 
                 <TextView
                     android:id="@+id/textViewUserFriend"
@@ -54,9 +53,6 @@
                     android:text="Name user"
                     android:textSize="15dp"
                     android:textStyle="bold"/>
-
-
-
 
             </LinearLayout>
 

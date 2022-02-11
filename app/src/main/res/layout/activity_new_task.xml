@@ -22,13 +22,6 @@
             android:layout_marginBottom="200dp"
             android:background="@drawable/bakgroundtask">
 
-            <ImageView
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_add_new_task"/>
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleImageBackTask"
                 android:layout_width="30dp"
@@ -55,10 +48,11 @@
                     android:backgroundTint="@color/light_blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Save"
                     android:textColor="@color/white"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
+                    android:text="SAVE"
+                    android:gravity="center"
                     android:layout_marginTop="20dp"
                     android:textSize="17dp"/>
 
