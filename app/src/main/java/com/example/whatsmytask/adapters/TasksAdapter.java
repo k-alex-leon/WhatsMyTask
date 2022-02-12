@@ -2,12 +2,16 @@ package com.example.whatsmytask.adapters;
 
 
 
+import static com.example.whatsmytask.R.drawable.*;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import android.graphics.Bitmap;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +44,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,7 +68,6 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
     TaskProvider mTaskProvider;
 
 
-
     public TasksAdapter(FirestoreRecyclerOptions<TaskU> options, Context context){
         super(options);
         this.context = context;
@@ -76,6 +80,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         DocumentSnapshot document = getSnapshots().getSnapshot(position);
         final String TaskId = document.getId();
 
+        int odd = position % 2;
 
         holder.textViewTitle.setText(taskU.getTitleTask().toUpperCase(Locale.ROOT));
         holder.textViewDescription.setText(taskU.getDescriptionTask());
@@ -84,8 +89,15 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
         if (taskU.isTaskCheck()){
             holder.checkboxTask.setChecked(true);
-        }
-        else{
+            holder.linearContainerCardview.setBackgroundResource(cardviewcheck);
+        }else{
+
+            if(odd == 1){
+                holder.linearContainerCardview.setBackgroundResource(cardviewblueinvert);
+            }else if (odd == 0){
+                holder.linearContainerCardview.setBackgroundResource(cardviewblue);
+            }
+
             // alerta de notificacion
             long alarmTaskDate = taskU.getTaskAlarmDate();
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -107,6 +119,12 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
                     taskU.setTaskCheck(true);
                     mTaskProvider.updateTask(taskU);
                 }else {
+
+                    if(odd == 1){
+                        holder.linearContainerCardview.setBackgroundResource(cardviewblueinvert);
+                    }else if (odd == 0){
+                        holder.linearContainerCardview.setBackgroundResource(cardviewblue);
+                    }
 
                     // alerta de notificacion
                     long alarmTaskDate = taskU.getTaskAlarmDate();
@@ -142,7 +160,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         // para usuarios agregados a la tarea
         else if(!taskU.getIdUser().contentEquals(idUser)){
 
-            holder.imageViewEditTask.setImageResource(R.drawable.ic_eye);
+            holder.imageViewEditTask.setImageResource(ic_eye);
             holder.imageViewEditTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -153,10 +171,6 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
 
     }
-
-
-
-
 
     // INSTANCIAMOS LA VISTA QUE QUEREMOS USAR
     @NonNull
@@ -173,6 +187,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         TextView textViewDate, textViewHour;
         ImageView imageViewEditTask;
         CheckBox checkboxTask;
+        LinearLayout linearContainerCardview;
 
 
         public ViewHolder(View view){
@@ -183,7 +198,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
             textViewHour = view.findViewById(R.id.textViewHourPostCard);
             imageViewEditTask = view.findViewById(R.id.imageViewEditTask);
             checkboxTask = view.findViewById(R.id.checkboxTask);
-
+            linearContainerCardview = view.findViewById(R.id.linearContainerCardview);
 
             mAuthProvider = new AuthProvider();
             mTaskProvider = new TaskProvider();
