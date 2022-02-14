@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.whatsmytask.R;
@@ -18,21 +19,16 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    CircleImageView mbtnCircleButtonBack;
+    ImageView mbtnButtonBack;
     TextInputEditText mTextInputName;
     TextInputEditText mTextInputEmail;
     TextInputEditText mTextInputPassword;
@@ -52,11 +48,11 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mbtnCircleButtonBack = findViewById(R.id.circleImageBack);
+        mbtnButtonBack = findViewById(R.id.imageRegisterGoBack);
         mTextInputName = findViewById(R.id.textInputUserName);
         mTextInputEmail = findViewById(R.id.textInputEmail);
         mTextInputPassword = findViewById(R.id.textInputPassword);
-        mTextInputConfirmPassword = findViewById(R.id.textInputConfirmPaswword);
+        mTextInputConfirmPassword = findViewById(R.id.textInputConfirmPassword);
         mButtonRegister = findViewById(R.id.btnRegister);
 
         mAuthprovider = new AuthProvider();
@@ -70,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Accion de la flecha sup izq
         //El metodo finish devuelve a la pagina anterior
-        mbtnCircleButtonBack.setOnClickListener(new View.OnClickListener() {
+        mbtnButtonBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 import com.example.whatsmytask.R;
 
 import com.example.whatsmytask.adapters.TaskFriendAdapter;
-import com.example.whatsmytask.fragments.HomeFragment;
 import com.example.whatsmytask.models.TaskU;
 
 import com.example.whatsmytask.models.User;
@@ -53,22 +51,12 @@ public class NewTaskActivity extends AppCompatActivity{
     Button mBtnSaveTask;
     CircleImageView mBtnCircleButtonBackTask;
     TextInputEditText mTextInputTaskTitle,mTextInputDescriptionTask;
-    ImageView mTaskDate, mTaskHour, mAddFriendTask;
-    TextView mEtDate, mEtHour;
-    String dateT;
-    String hourT;
-    String mTitleTask;
-    String mDescriptionTask;
-    LinearLayout mLinearRecyclerFriends;
+    ImageView mTaskDate, mTaskHour;
+    TextView mEtDate, mEtHour, mTxtFriendsSelected;
+    String dateT, hourT, mTitleTask, mDescriptionTask;
+    LinearLayout mLlAddFriends;
 
-    RecyclerView mRecyclerView;
-
-    Dialog mDialogPopup;
-
-    ItemChecked itemChecked;
     ArrayList<String> friendsId;
-    //le muestra al usuario que debe esperar mientras termina un proceso
-    // AlertDialog mDialog;
 
     TaskFriendAdapter mTaskFriendAdapter;
     FriendsProvider mFriendsProvider;
@@ -87,26 +75,26 @@ public class NewTaskActivity extends AppCompatActivity{
         mAuthProvider = new AuthProvider();
 
         friendsId = new ArrayList<>();
+        friendsId.add(mAuthProvider.getUid());
 
         mBtnSaveTask = findViewById(R.id.btnSaveTask);
         mBtnCircleButtonBackTask = findViewById(R.id.circleImageBackTask);
         mTaskDate = findViewById(R.id.taskDate);
         mTaskHour = findViewById(R.id.taskHour);
-        mAddFriendTask = findViewById(R.id.imageViewAddFriendTask);
         mTextInputTaskTitle = findViewById(R.id.textInputTaskTitle);
         mTextInputDescriptionTask = findViewById(R.id.textInputDescriptionTask);
+        mLlAddFriends = findViewById(R.id.lLAddFriends);
+        mTxtFriendsSelected = findViewById(R.id.txtFriendsSelected);
         mEtDate = findViewById(R.id.etDate);
         mEtHour = findViewById(R.id.etHour);
-        mLinearRecyclerFriends = findViewById(R.id.linearRecyclerFriends);
 
-        mRecyclerView = findViewById(R.id.recyclerHideFriends);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mDialogPopup = new Dialog(this);
-
-        // cuadro de carga (ALERT DIALOG)
-
+        mLlAddFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFriendsList();
+            }
+        });
 
         // IMGVIEW QUE ABRE EL CALENDARIO
         mTaskDate.setOnClickListener(v -> openCalendar());
@@ -119,16 +107,6 @@ public class NewTaskActivity extends AppCompatActivity{
             }
         });
 
-        // IMGVIEW QUE ABRE POPUP ADDfRIEND
-        mAddFriendTask.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLinearRecyclerFriends.setVisibility(View.VISIBLE);
-                friendsList();
-            }
-        });
-
-        // Accion de la flecha sup izq
         //El metodo finish devuelve a la pagina anterior
         mBtnCircleButtonBackTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,11 +118,9 @@ public class NewTaskActivity extends AppCompatActivity{
         mBtnSaveTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveTask();
+                validateTask();
             }
         });
-
-
 
     }
 
@@ -154,7 +130,6 @@ public class NewTaskActivity extends AppCompatActivity{
         Calendar hourPicker = Calendar.getInstance();
         int hour = hourPicker.get(Calendar.HOUR_OF_DAY);
         int minute = hourPicker.get(Calendar.MINUTE);
-
 
 
         TimePickerDialog tmd = new TimePickerDialog(NewTaskActivity.this, new TimePickerDialog.OnTimeSetListener() {
@@ -200,9 +175,24 @@ public class NewTaskActivity extends AppCompatActivity{
         }
 
 
+    public void showFriendsList(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        View view = getLayoutInflater().inflate(R.layout.add_friend_dialog, null);
+        // obteniendo ref del layout
+        ImageView imgVCLose = view.findViewById(R.id.imgVCloseSelectFriendsDialog);
+        Button btnAdd = view.findViewById(R.id.btnAddSelectFriensDialog);
+        RecyclerView recyclerViewSelectFriends = view.findViewById(R.id.recyclerSelectFriendsDialog);
 
-    public void friendsList(){
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerViewSelectFriends.setLayoutManager(linearLayoutManager);
+
+        // haciendo consulta de lista de amigos
         Query query = mFriendsProvider.getAll(mAuthProvider.getUid());
         FirestoreRecyclerOptions<User> options =
                 new FirestoreRecyclerOptions.Builder<User>()
@@ -213,30 +203,58 @@ public class NewTaskActivity extends AppCompatActivity{
             @Override
             public void itemSelected(ArrayList<String> array) {
                 friendsId = array;
-                friendsId.add(mAuthProvider.getUid());
+
             }
         });
-        mRecyclerView.setAdapter(mTaskFriendAdapter);
+        recyclerViewSelectFriends.setAdapter(mTaskFriendAdapter);
         // esto escucha los cambios que se hagan en la db
         mTaskFriendAdapter.startListening();
+
+        imgVCLose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (friendsId.size() >= 1){
+                    Toast.makeText(view.getContext(), "Finish select friends", Toast.LENGTH_SHORT).show();
+                }else{
+                    dialog.dismiss();
+                }
+            }
+        });
+
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (friendsId.size() <= 1){
+                    Toast.makeText(view.getContext(), "Add a friend", Toast.LENGTH_SHORT).show();
+                }else{
+                    dialog.dismiss();
+                }
+            }
+        });
+
+
     }
 
     // CREAR LA TAREA EN LA DB
 
-    private void saveTask() {
+    private void validateTask() {
 
         mTitleTask = mTextInputTaskTitle.getText().toString();
         mDescriptionTask = mTextInputDescriptionTask.getText().toString();
+        String dateSeleted = mEtDate.getText().toString();
+        String hourSelected = mEtHour.getText().toString();
 
+        if(!mTitleTask.isEmpty() && !mDescriptionTask.isEmpty()){
 
-        if(!mTitleTask.isEmpty() && !mDescriptionTask.isEmpty()
-                && !dateT.isEmpty() && !mEtHour.equals("")){
+            if (!dateSeleted.isEmpty() && !hourSelected.isEmpty()){
+                // mDialog.show();
+                createTask();
+            }else{
+                Toast.makeText(this, "Select hour and date", Toast.LENGTH_LONG).show();
+            }
 
-            // mDialog.show();
-            createTask(friendsId);
-
-        }
-        else{
+        }else{
             Toast.makeText(this, "Oops it seems that something is missing", Toast.LENGTH_LONG).show();
         }
 
@@ -246,7 +264,7 @@ public class NewTaskActivity extends AppCompatActivity{
 
 
     // CREAR LA TAREA EN LA DB
-    private void createTask(ArrayList friendsId) {
+    private void createTask() {
 
         // agrego el idUser al array para despues llamarlo desde el fragment
 
@@ -294,7 +312,6 @@ public class NewTaskActivity extends AppCompatActivity{
         mEtHour.setText("");
         dateT = "";
         hourT = "";
-        mLinearRecyclerFriends.setVisibility(View.GONE);
 
     }
 

@@ -88,7 +88,8 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         holder.textViewHour.setText(taskU.getHourTask());
 
         if (taskU.isTaskCheck()){
-            holder.checkboxTask.setChecked(true);
+            // holder.checkboxTask.setChecked(true);
+            holder.checkboxTask.setVisibility(View.GONE);
             holder.linearContainerCardview.setBackgroundResource(cardviewcheck);
         }else{
 

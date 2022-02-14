@@ -42,7 +42,7 @@
                     android:id="@+id/circleImageViewProfile"
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
-                    android:src="@drawable/ic_person"
+                    android:src="@drawable/ic_person_white"
                     app:civ_circle_background_color="@color/darkGray"
                     android:layout_marginTop="100dp"
                     app:civ_border_color="@color/white"

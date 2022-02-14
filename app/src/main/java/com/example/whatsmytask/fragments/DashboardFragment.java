@@ -156,9 +156,9 @@ public class DashboardFragment extends Fragment {
         allTask.add(new RadarEntry(numberTeamTask));
 
         RadarDataSet radarDataSet = new RadarDataSet(allTask, "You're progress.");
-        radarDataSet.setColor(Color.RED);
+        radarDataSet.setColor(Color.parseColor("#1B7BCF"));
         radarDataSet.setLineWidth(2f);
-        radarDataSet.setValueTextColor(Color.RED);
+        radarDataSet.setValueTextColor(Color.parseColor("#1B7BCF"));
         radarDataSet.setValueTextSize(14f);
 
 

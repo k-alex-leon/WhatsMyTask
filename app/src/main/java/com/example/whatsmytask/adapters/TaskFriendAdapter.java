@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,8 +60,6 @@ public class TaskFriendAdapter extends FirestoreRecyclerAdapter<User, TaskFriend
     }
 
 
-
-
     private void getFriendInfo(String friendId, TaskFriendAdapter.ViewHolder holder) {
         mUserProvider.getUser(friendId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -88,7 +86,7 @@ public class TaskFriendAdapter extends FirestoreRecyclerAdapter<User, TaskFriend
                         }else if(!holder.mCheckboxFriend.isChecked()){
                             checkedFriends.remove(friendId);
                         }
-                        //Toast.makeText(context, checkedFriends.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, checkedFriends.toString(), Toast.LENGTH_SHORT).show();
                         itemChecked.itemSelected(checkedFriends);
 
                     }
@@ -124,9 +122,6 @@ public class TaskFriendAdapter extends FirestoreRecyclerAdapter<User, TaskFriend
 
             mFriendProvider = new FriendsProvider();
             mAuthProvider = new AuthProvider();
-
-
-
 
         }
     }
