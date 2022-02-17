@@ -9,8 +9,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -21,12 +21,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.whatsmytask.R;
+import com.example.whatsmytask.adapters.FriendsWorkingAdapter;
 import com.example.whatsmytask.adapters.TaskFriendAdapter;
 import com.example.whatsmytask.models.TaskU;
 import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.FriendsProvider;
 import com.example.whatsmytask.providers.TaskProvider;
+import com.example.whatsmytask.providers.UsersProvider;
 import com.example.whatsmytask.utils.ItemChecked;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,13 +55,11 @@ public class TaskEditActivity extends AppCompatActivity {
     CircleImageView mBtnCircleButtonBackTask;
     TextInputEditText mEditTaskTitle, mEditDescriptionTask;
     ImageView mTaskImageDate, mTaskImageHour, mTaskImageDelete, mImageAddFriend;
-    RecyclerView mRecyclerView;
     TextView mEtUDate, mEtUHour;
-    LinearLayout mLinearRecyclerEditFriends;
-    String dateT;
-    String hourT;
+    String dateT, hourT;
+    LinearLayout mLlAddFriendsEdit;
 
-
+    RecyclerView mRecyclerViewFriendsWorking;
     //le muestra al usuario que debe esperar mientras termina un proceso
     AlertDialog mDialog;
 
@@ -68,13 +68,15 @@ public class TaskEditActivity extends AppCompatActivity {
     FriendsProvider mFriendsProvider;
     TaskFriendAdapter mTaskFriendAdapter;
     TaskU mTaskU;
-
+    UsersProvider mUserProvider;
+    FriendsWorkingAdapter mFriendsWorkingAdapter;
     String mExtraTaskId;
+
 
     String titleTask,descriptionTask,dateTask,hourTask;
     String mTaskTitle,mDescriptionTask,mDateTask,mHourTask;
 
-    ArrayList<String> friendsId;
+    ArrayList<String> friendsIdArray , newEditFriendsArray;
 
 
     Calendar calendar = Calendar.getInstance();
@@ -88,8 +90,10 @@ public class TaskEditActivity extends AppCompatActivity {
         mTaskProvider = new TaskProvider();
         mAuthProvider = new AuthProvider();
         mTaskU = new TaskU();
+        mUserProvider = new UsersProvider();
 
-        friendsId = new ArrayList<>();
+        friendsIdArray = new ArrayList<>();
+        newEditFriendsArray = new ArrayList<>();
 
         mExtraTaskId = getIntent().getStringExtra("id");
 
@@ -100,14 +104,11 @@ public class TaskEditActivity extends AppCompatActivity {
         mTaskImageDate = findViewById(R.id.taskDate);
         mTaskImageHour = findViewById(R.id.taskHour);
         mTaskImageDelete = findViewById(R.id.imgDeleteTaskView);
-        mImageAddFriend = findViewById(R.id.imgViewAddFriendTask);
+        mLlAddFriendsEdit = findViewById(R.id.lLAddFriendsEdit);
 
-
-        mRecyclerView = findViewById(R.id.recyclerEditFriends);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mLinearRecyclerEditFriends = findViewById(R.id.linearRecyclerEditFriends);
+        mRecyclerViewFriendsWorking = findViewById(R.id.recyclerTeamEditTask);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerViewFriendsWorking.setLayoutManager(mLinearLayoutManager);
 
         mEtUDate = findViewById(R.id.editTaskDate);
         mEtUHour = findViewById(R.id.editTaskHour);
@@ -122,7 +123,7 @@ public class TaskEditActivity extends AppCompatActivity {
         mBtnUpdateTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickUpdateTask(friendsId);
+                validateUpdateTask();
             }
         });
 
@@ -133,11 +134,10 @@ public class TaskEditActivity extends AppCompatActivity {
             }
         });
 
-        mImageAddFriend.setOnClickListener(new View.OnClickListener() {
+        mLlAddFriendsEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLinearRecyclerEditFriends.setVisibility(View.VISIBLE);
-                friendsList();
+                showFriendsList();
             }
         });
 
@@ -168,9 +168,6 @@ public class TaskEditActivity extends AppCompatActivity {
         getTask();
 
     }
-
-
-
 
     // ABRIR HORA
 
@@ -221,33 +218,15 @@ public class TaskEditActivity extends AppCompatActivity {
         dpd.show();
     }
 
-    private void friendsList() {
-        Query query = mFriendsProvider.getAll(mAuthProvider.getUid());
-        FirestoreRecyclerOptions<User> options =
-                new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-        mTaskFriendAdapter = new TaskFriendAdapter(options,this, new ItemChecked() {
-            @Override
-            public void itemSelected(ArrayList<String> array) {
-                friendsId = array;
-                // agrega el id del usuario a la lista de amigos de tarea
-                friendsId.add(mAuthProvider.getUid());
-            }
-        });
-        mRecyclerView.setAdapter(mTaskFriendAdapter);
-        // esto escucha los cambios que se hagan en la db
-        mTaskFriendAdapter.startListening();
-    }
-
     private void getTask(){
         mTaskProvider.getTaskById(mExtraTaskId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
+                    TaskU taskU = documentSnapshot.toObject(TaskU.class);
                     if(documentSnapshot.contains("titleTask")){
-                        titleTask = documentSnapshot.getString("titleTask");
+                        // titleTask = documentSnapshot.getString("titleTask");
+                        titleTask = taskU.getTitleTask();
                     }
                     if(documentSnapshot.contains("descriptionTask")){
                         descriptionTask = documentSnapshot.getString("descriptionTask");
@@ -259,14 +238,15 @@ public class TaskEditActivity extends AppCompatActivity {
                         dateTask = documentSnapshot.getString("dateTask");
                     }
                     if (documentSnapshot.contains("friendsTask")){
-                        friendsId = (ArrayList<String>) documentSnapshot.get("friendsTask");
+                        friendsIdArray = taskU.getFriendsTask();
+                        showFriendsWorkingList();
                     }
-
 
                     mEditTaskTitle.setText(titleTask);
                     mEditDescriptionTask.setText(descriptionTask);
                     mEtUDate.setText(dateTask);
                     mEtUHour.setText(hourTask);
+
 
 
                 }
@@ -275,7 +255,96 @@ public class TaskEditActivity extends AppCompatActivity {
 
     }
 
-    private void clickUpdateTask(ArrayList friendsId){
+    private void showFriendsList() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        View view = getLayoutInflater().inflate(R.layout.add_friend_dialog, null);
+        // obteniendo ref del layout
+        ImageView imgVCLose = view.findViewById(R.id.imgVCloseSelectFriendsDialog);
+        Button btnAdd = view.findViewById(R.id.btnAddSelectFriensDialog);
+        RecyclerView recyclerViewSelectFriends = view.findViewById(R.id.recyclerSelectFriendsDialog);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerViewSelectFriends.setLayoutManager(linearLayoutManager);
+
+        // haciendo consulta de lista de amigos
+        Query query = mFriendsProvider.getAll(mAuthProvider.getUid());
+        FirestoreRecyclerOptions<User> options =
+                new FirestoreRecyclerOptions.Builder<User>()
+                        .setQuery(query, User.class)
+                        .build();
+
+        mTaskFriendAdapter = new TaskFriendAdapter(options,this, new ItemChecked() {
+            @Override
+            public void itemSelected(ArrayList<String> array) {
+                newEditFriendsArray = array;
+            }
+        });
+        recyclerViewSelectFriends.setAdapter(mTaskFriendAdapter);
+        // esto escucha los cambios que se hagan en la db
+        mTaskFriendAdapter.startListening();
+
+
+        imgVCLose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTaskFriendAdapter.stopListening();
+                if (newEditFriendsArray.size() >= 1){
+                    // quitando los amigos seleccionados
+                    for (int i = 0; i < newEditFriendsArray.size(); i++){
+                        newEditFriendsArray.remove(i);
+                    }
+                    dialog.dismiss();
+                }else{
+                    dialog.dismiss();
+                }
+            }
+        });
+
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTaskFriendAdapter.stopListening();
+                if (newEditFriendsArray.size() < 1){
+                    Toast.makeText(view.getContext(), "Add a friend", Toast.LENGTH_SHORT).show();
+                }else{
+                    /*
+                    * if (newEditFriendsArray.size() > friendsIdArray.size()){
+                        // compara los valores con el anterior array
+                        for (int i = 0; i < friendsIdArray.size(); i++){
+                            // si el valor del nuevo es diferente lo agrega al viejo
+                            if (!newEditFriendsArray.get(i).equals(friendsIdArray.get(i))){
+                                friendsIdArray.add(newEditFriendsArray.get(i));
+                            }
+                            Log.d("OLDARRAY", friendsIdArray.get(i));
+                        }
+                    }
+                    * */
+                    dialog.dismiss();
+                }
+            }
+        });
+
+    }
+
+    private void showFriendsWorkingList() {
+        if (friendsIdArray != null && friendsIdArray.size() > 1){
+
+                mFriendsWorkingAdapter = new FriendsWorkingAdapter(friendsIdArray, TaskEditActivity.this);
+                mRecyclerViewFriendsWorking.setAdapter(mFriendsWorkingAdapter);
+
+            }
+
+    }
+
+
+    private void validateUpdateTask(){
 
         mDialog.show();
 
@@ -293,8 +362,11 @@ public class TaskEditActivity extends AppCompatActivity {
             taskU.setDescriptionTask(mDescriptionTask);
             taskU.setDateTask(mDateTask);
             taskU.setHourTask(mHourTask);
-            if (!friendsId.isEmpty()){
-                taskU.setFriendsTask(friendsId);
+
+            if (newEditFriendsArray.size() >= 1){
+                taskU.setFriendsTask(newEditFriendsArray);
+            }else{
+                taskU.setFriendsTask(friendsIdArray);
             }
             taskU.setTaskAlarmDate(calendar.getTimeInMillis());
             updateTask(taskU);

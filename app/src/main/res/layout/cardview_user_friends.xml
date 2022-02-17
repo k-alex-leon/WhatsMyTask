@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
-        android:background="@color/darkGray"
-        >
+        android:background="@color/darkGray">
 
         <RelativeLayout
             android:layout_width="match_parent"

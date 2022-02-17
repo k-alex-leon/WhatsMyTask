@@ -52,7 +52,7 @@ public class NewTaskActivity extends AppCompatActivity{
     CircleImageView mBtnCircleButtonBackTask;
     TextInputEditText mTextInputTaskTitle,mTextInputDescriptionTask;
     ImageView mTaskDate, mTaskHour;
-    TextView mEtDate, mEtHour, mTxtFriendsSelected;
+    TextView mEtDate, mEtHour;
     String dateT, hourT, mTitleTask, mDescriptionTask;
     LinearLayout mLlAddFriends;
 
@@ -75,7 +75,7 @@ public class NewTaskActivity extends AppCompatActivity{
         mAuthProvider = new AuthProvider();
 
         friendsId = new ArrayList<>();
-        friendsId.add(mAuthProvider.getUid());
+
 
         mBtnSaveTask = findViewById(R.id.btnSaveTask);
         mBtnCircleButtonBackTask = findViewById(R.id.circleImageBackTask);
@@ -84,7 +84,6 @@ public class NewTaskActivity extends AppCompatActivity{
         mTextInputTaskTitle = findViewById(R.id.textInputTaskTitle);
         mTextInputDescriptionTask = findViewById(R.id.textInputDescriptionTask);
         mLlAddFriends = findViewById(R.id.lLAddFriends);
-        mTxtFriendsSelected = findViewById(R.id.txtFriendsSelected);
         mEtDate = findViewById(R.id.etDate);
         mEtHour = findViewById(R.id.etHour);
 
@@ -203,12 +202,12 @@ public class NewTaskActivity extends AppCompatActivity{
             @Override
             public void itemSelected(ArrayList<String> array) {
                 friendsId = array;
-
             }
         });
         recyclerViewSelectFriends.setAdapter(mTaskFriendAdapter);
         // esto escucha los cambios que se hagan en la db
         mTaskFriendAdapter.startListening();
+
 
         imgVCLose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -225,7 +224,7 @@ public class NewTaskActivity extends AppCompatActivity{
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (friendsId.size() <= 1){
+                if (friendsId.size() < 1){
                     Toast.makeText(view.getContext(), "Add a friend", Toast.LENGTH_SHORT).show();
                 }else{
                     dialog.dismiss();
@@ -278,6 +277,7 @@ public class NewTaskActivity extends AppCompatActivity{
         if(friendsId.size() <= 1){
             taskU.setFriendsTask(null);
         }else{
+            friendsId.add(mAuthProvider.getUid());
             taskU.setFriendsTask(friendsId);
         }
         // new Date().getTime() = determina la fecha exacta de creacion de la tarea

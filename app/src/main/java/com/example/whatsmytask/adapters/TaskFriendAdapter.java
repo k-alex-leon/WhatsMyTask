@@ -86,7 +86,7 @@ public class TaskFriendAdapter extends FirestoreRecyclerAdapter<User, TaskFriend
                         }else if(!holder.mCheckboxFriend.isChecked()){
                             checkedFriends.remove(friendId);
                         }
-                        Toast.makeText(context, checkedFriends.toString(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, checkedFriends.toString(), Toast.LENGTH_SHORT).show();
                         itemChecked.itemSelected(checkedFriends);
 
                     }

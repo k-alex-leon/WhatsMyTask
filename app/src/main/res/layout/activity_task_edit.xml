@@ -7,315 +7,269 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.NewTaskActivity">
 
-
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/bakgroundtask">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageBackTask"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="left|top"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_arrow_back" />
+
+            <ImageView
+                android:id="@+id/imgDeleteTaskView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="top|right"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_delete" />
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginTop="150dp"
+            app:cardCornerRadius="15dp">
 
-            <!--
-            REGISTER BOX
-            -->
-
-            <io.github.florent37.shapeofview.shapes.ArcView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:elevation="4dp"
-                app:shape_arc_height="20dp"
-                app:shape_arc_position="bottom"
-                >
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/light_blue"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circleImageBackTask"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:src="@drawable/ic_arrow_back"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="15dp"
-                    />
-
-                <ImageView
-                    android:id="@+id/imgDeleteTaskView"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="15dp"
-                    android:src="@drawable/ic_delete"
-                    android:layout_gravity="top|right"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <TextView
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="EDIT TASK"
-                        android:textColor="@color/design_default_color_on_primary"
-                        android:textAlignment="center"
-                        android:textSize="30dp"
-                        android:textStyle="bold"
+                        android:layout_marginLeft="20dp"
                         android:layout_marginTop="20dp"
-                        />
-                    <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:src="@drawable/ic_edit"
-                        />
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
 
-                </LinearLayout>
-            </io.github.florent37.shapeofview.shapes.ArcView>
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_add_task" />
 
-            <!--
-            INPUT TASK TITLE
-            -->
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editTaskTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:hint="Title"
+                                android:inputType="text" />
 
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@drawable/ic_add_task"
-                    android:layout_marginTop="12dp"/>
+                        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTaskTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Title"
-                        android:inputType="text"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <!--
-            INPUT DESCRIPTION TASK
-            -->
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp">
-
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:src="@drawable/ic_text_snippet"
-                    android:layout_marginTop="12dp"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginRight="10dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDescriptionTask"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Description"
-                        android:inputType="textMultiLine"
-                        android:maxLength="200"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-                <!--
-                DATE PICK DIALOG
-            -->
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="left|center"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="25dp">
-
-                    <ImageView
-                        android:id="@+id/taskDate"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="13dp"
-                        android:src="@drawable/ic_calendar"
-                        />
+                    </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Date"
-                            android:textSize="18dp"
-                            />
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:id="@+id/editTaskDate"
-                            android:layout_width="100dp"
-                            android:layout_height="40dp"
-                            android:textSize="20dp"
-                            />
+                        <ImageView
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_text_snippet" />
 
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/editDescriptionTask"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:hint="Description"
+                                android:inputType="textMultiLine"
+                                android:maxLength="200" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
+
+                        <!--
+                        DATE PICK DIALOG
+                    -->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/taskDate"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/ic_calendar" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Date"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:id="@+id/editTaskDate"
+                                    android:layout_width="120dp"
+                                    android:layout_height="40dp"
+                                    android:textAlignment="center"
+                                    android:textSize="20dp" />
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                        <!--
+                            HOUR PICK DIALOG
+                        -->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/taskHour"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/ic_alarm" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Hour"
+                                    android:textSize="18dp" />
+
+                                <TextView
+                                    android:id="@+id/editTaskHour"
+                                    android:layout_width="100dp"
+                                    android:layout_height="40dp"
+                                    android:textAlignment="center"
+                                    android:textSize="20dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
 
-                </LinearLayout>
-
-
-                <!--
-                    HOUR PICK DIALOG
-                -->
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_gravity="right|center"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="15dp"
-                    android:layout_marginLeft="50dp">
-
-                    <ImageView
-                        android:id="@+id/taskHour"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:layout_marginTop="13dp"
-                        android:src="@drawable/ic_alarm"
-                        />
-
                     <LinearLayout
+                        android:id="@+id/lLAddFriendsEdit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Hour"
-                            android:textSize="18dp"
-                            />
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageViewAddFriendTask"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/ic_add_person_gray" />
 
                         <TextView
-                            android:id="@+id/editTaskHour"
-                            android:layout_width="100dp"
-                            android:layout_height="40dp"
-                            android:textSize="20dp"
-                            />
+                            android:id="@+id/txtFriendsSelected"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:layout_gravity="center"
+                            android:text="Add friends" />
 
                     </LinearLayout>
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerTeamEditTask"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"/>
 
                 </LinearLayout>
 
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                >
-
-                <ImageView
-                    android:id="@+id/imgViewAddFriendTask"
-                    android:src="@drawable/ic_add_person_gray"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    />
-
-                <TextView
-                    android:id="@+id/txtFriendsSelected"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="Add friends"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/linearRecyclerEditFriends"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerEditFriends"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btnUpdateTask"
+                        android:backgroundTint="@color/light_blue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_gravity="bottom"
+                        android:text="SAVE"
+                        android:gravity="center"
+                        android:textSize="17dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-            <!--
-        BUTTON LOGIN
-        -->
-            <Button
-                android:id="@+id/btnUpdateTask"
-                android:backgroundTint="@color/light_blue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Update"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginBottom="20dp"
-                android:textSize="17dp"
-                android:layout_gravity="bottom"
-                />
+        </androidx.cardview.widget.CardView>
 
-
-
-            <!-- /!!! -->
-        </LinearLayout>
-
-
-    </ScrollView>
-
-
-
-
+    </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

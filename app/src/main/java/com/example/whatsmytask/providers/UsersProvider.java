@@ -28,6 +28,10 @@ public class UsersProvider {
         return mCollection.document(id).get();
     }
 
+    public Query getUserById(String id){
+        return mCollection.whereEqualTo("id", id);
+    }
+
     // Esta solicitando el modelo User de la carpeta models
     public Task<Void> create(User user){
        return mCollection.document(user.getId()).set(user);
