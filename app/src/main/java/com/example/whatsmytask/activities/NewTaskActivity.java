@@ -10,6 +10,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -186,6 +188,8 @@ public class NewTaskActivity extends AppCompatActivity{
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.setCancelable(false);
+        // quitamos el background del dialog para pasarle el custom_border
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

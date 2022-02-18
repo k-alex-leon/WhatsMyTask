@@ -336,6 +336,7 @@ public class TaskEditActivity extends AppCompatActivity {
     private void showFriendsWorkingList() {
         if (friendsIdArray != null && friendsIdArray.size() > 1){
 
+            // este adapter recibe un array con los id para luego hacer la consulta en la bd
                 mFriendsWorkingAdapter = new FriendsWorkingAdapter(friendsIdArray, TaskEditActivity.this);
                 mRecyclerViewFriendsWorking.setAdapter(mFriendsWorkingAdapter);
 

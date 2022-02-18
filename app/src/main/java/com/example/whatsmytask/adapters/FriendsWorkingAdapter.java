@@ -1,10 +1,15 @@
 package com.example.whatsmytask.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,6 +61,7 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
         mUserProvider.getUser(friendsList.get(position)).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
                 if (documentSnapshot.exists() && !documentSnapshot.getString("id").equals(mAuthProvider.getUid())){
                     if (documentSnapshot.contains("userName")){
                         holder.mTxtVFriendWorkingName.setText(documentSnapshot.getString("userName"));
@@ -67,8 +73,7 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
                     holder.mCImgVDeleteFriendWorking.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO terminar metodos para eliminar contacto de la tarea
-                            showConfirmRemoveFriend();
+                            showConfirmRemoveFriend(user);
                         }
                     });
                 }else{
@@ -78,7 +83,52 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
         });
     }
 
-    private void showConfirmRemoveFriend() {
+    private void showConfirmRemoveFriend(User user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.confirm_remove_friend, null);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        // quitamos el background del dialog para pasarle el custom_border
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        ImageView imgVCloseRemove;
+        CircleImageView cImgVFriend;
+        TextView txtVFriendName;
+        Button btnCancelRemove, btnRemove;
+
+        imgVCloseRemove = view.findViewById(R.id.imgVCloseRemoveFriend);
+        cImgVFriend = view.findViewById(R.id.cImgVFriend);
+        txtVFriendName = view.findViewById(R.id.txtFriendName);
+        btnCancelRemove = view.findViewById(R.id.btnCancelRemove);
+        btnRemove = view.findViewById(R.id.btnRemoveFriend);
+
+        Picasso.with(context).load(user.getImageProfile()).into(cImgVFriend);
+        txtVFriendName.setText(user.getUserName());
+
+        imgVCloseRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnCancelRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Falta metodo remover user", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
