@@ -13,6 +13,7 @@ import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -158,9 +159,12 @@ public class NewTaskActivity extends AppCompatActivity{
         int m = today.get(Calendar.MONTH);
         int d = today.get(Calendar.DAY_OF_MONTH);
 
+
+
             DatePickerDialog dpd = new DatePickerDialog(NewTaskActivity.this, new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int day) {
+
                     calendar.set(Calendar.DAY_OF_MONTH,day);
                     calendar.set(Calendar.MONTH,month);
                     calendar.set(Calendar.YEAR,year);
@@ -169,7 +173,6 @@ public class NewTaskActivity extends AppCompatActivity{
                     dateT = format.format(calendar.getTimeInMillis());
                     mEtDate.setText(dateT);
 
-                        
                 }
             },y,m,d);
             dpd.show();
@@ -293,6 +296,7 @@ public class NewTaskActivity extends AppCompatActivity{
                 if(taskSave.isSuccessful()){
                     // mDialog.dismiss();
                     clearForm();
+                    finish();
                     Toast.makeText(NewTaskActivity.this, "Task save", Toast.LENGTH_SHORT).show();
 
                 }else{

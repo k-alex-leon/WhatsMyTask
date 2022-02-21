@@ -12,20 +12,30 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBarFriends"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            style="@style/MaterialSearchBarLight"
-            app:mt_hint="Search your friend"
-            app:mt_placeholder="Whrite an email"
-            app:mt_maxSuggestionsCount="10"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:id="@+id/imgVGoBack"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_arrow_back_gray"/>
 
+            <com.mancj.materialsearchbar.MaterialSearchBar
+                android:id="@+id/searchBarFriends"
+                style="@style/MaterialSearchBarLight"
+                android:layout_gravity="center"
+                app:mt_hint="Search your friend"
+                app:mt_placeholder="Whrite an email"
+                app:mt_maxSuggestionsCount="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,8 +50,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewFriend"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent"/>
+
         </LinearLayout>
 
 

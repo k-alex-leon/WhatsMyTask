@@ -2,68 +2,67 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/custom_border"
-    android:padding="10dp">
-    
+    android:padding="10dp"
+    android:fitsSystemWindows="true">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center|top">
+        android:padding="10dp"
+        android:gravity="center">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/deleteAnimation"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="delete.json"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Remove from this task"
-            android:gravity="center"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/cImgVFriend"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_margin="20dp"
-            android:src="@drawable/ic_person_gray"/>
-
-        <TextView
-            android:id="@+id/txtFriendName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:text="Do you want to delete this task?"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp"
             android:textStyle="bold"/>
 
-        <LinearLayout
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:padding="5dp"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnCancelRemove"
+                android:id="@+id/btnCancelDelete"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@color/gray"
-                android:layout_margin="5dp"
+                android:background="@drawable/custom_border"
+                android:backgroundTint="@color/gray"
+                android:layout_margin="10dp"
                 android:text="Cancel"/>
 
             <Button
-                android:id="@+id/btnRemoveFriend"
+                android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@color/blue"
-                android:layout_margin="5dp"
-                android:text="Remove"
-                android:textColor="@color/white"/>
-        </LinearLayout>
-        
+                android:background="@drawable/custom_border"
+                android:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_margin="10dp"
+                android:text="Delete"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imgVCloseRemoveFriend"
+        android:id="@+id/imgVCloseDelete"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="right"

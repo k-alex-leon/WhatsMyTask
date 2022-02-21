@@ -4,9 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.jetbrains.annotations.NotNull;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFriendsAdapter.ViewHolder> {
     Context context;
@@ -53,6 +58,9 @@ public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFrien
         mUserProvider.getUser(friendId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
+                // convierte la consulta en el objeto indicado
+                User user = documentSnapshot.toObject(User.class);
+
                 if(documentSnapshot.exists()){
                     if (documentSnapshot.contains("userName")){
                         String userName = documentSnapshot.getString("userName");
@@ -74,7 +82,7 @@ public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFrien
                 holder.mImageViewDeleteFriend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showConfirmDeleteFriend(friendId);
+                        showConfirmDeleteFriend(user);
                     }
                 });
             }
@@ -82,31 +90,68 @@ public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFrien
     }
 
     // Confirmar por alert dialog eliminar amigo
-    private void showConfirmDeleteFriend(String friendId) {
-        new AlertDialog.Builder(context)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Delete friend")
-                .setMessage("Do you want delete this person?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteFriend(friendId);
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
+    private void showConfirmDeleteFriend(User user) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.remove_friend_dialog, null);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        // quitamos el background del dialog para pasarle el custom_border
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        ImageView imgVCloseRemove;
+        CircleImageView cImgVFriend;
+        TextView txtVFriendName , txtVTitleRemoveFriendDialog;
+        Button btnCancelRemove, btnRemove;
+
+        imgVCloseRemove = view.findViewById(R.id.imgVCloseRemoveFriend);
+        cImgVFriend = view.findViewById(R.id.cImgVFriend);
+        txtVFriendName = view.findViewById(R.id.txtFriendName);
+        txtVTitleRemoveFriendDialog = view.findViewById(R.id.txtVTitleRemoveFriendDialog);
+        btnCancelRemove = view.findViewById(R.id.btnCancelRemove);
+        btnRemove = view.findViewById(R.id.btnRemoveFriend);
+
+        txtVTitleRemoveFriendDialog.setText("DELETE FRIEND");
+        Picasso.with(context).load(user.getImageProfile()).into(cImgVFriend);
+        txtVFriendName.setText(user.getUserName());
+
+        imgVCloseRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnCancelRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnRemove.setText("DELETE");
+        btnRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                deleteFriend(user.getId());
+            }
+        });
+
     }
 
     // Metodo para borrar amigo
     private void deleteFriend(String friendId) {
-        Friend friend = new Friend();
-        friend.setIdUser1(mAuthProvider.getUid());
-        friend.setIdUser2(friendId);
-        mFriendProvider.deleteFriendByIdUser1(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        mFriendProvider.deleteFriendByIdUser1(mAuthProvider.getUid(), friendId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull @NotNull Task<Void> task) {
                 if(task.isSuccessful()){
-                    mFriendProvider.deleteFriendByIdUser2(friend).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    mFriendProvider.deleteFriendByIdUser2(friendId, mAuthProvider.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull @NotNull Task<Void> task) {
                             if (task.isSuccessful()){
@@ -129,7 +174,7 @@ public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFrien
     @NotNull
     @Override
     public ViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_user_friends,parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_user_friends ,parent , false);
         return new ViewHolder(view);
     }
 

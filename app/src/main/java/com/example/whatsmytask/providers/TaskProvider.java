@@ -4,11 +4,11 @@ package com.example.whatsmytask.providers;
 import com.example.whatsmytask.models.TaskU;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,18 +25,9 @@ public class TaskProvider {
         return mCollection.document().set(taskU);
     }
 
-    public Query getAll(){
-        return mCollection.orderBy("titleTask",Query.Direction.DESCENDING);
-    }
-
     public Query getTaskByUser(String id){
         return mCollection.whereEqualTo("idUser",id);
     }
-
-    public Query getTaskByArray(String id){
-        return mCollection.whereArrayContains("friendsTask", id);
-    }
-
 
     public Query getTaskPending(String id){return mCollection.whereEqualTo("idUser",id).whereEqualTo("taskCheck", false);}
 
@@ -44,12 +35,8 @@ public class TaskProvider {
 
     public Query getTeamTask(String id){return mCollection.whereArrayContains("friendsTask", id);}
 
-    public Query getFriendsWorking(String id, String idFriend){
-        return mCollection.whereArrayContains("friendsTask", id).whereArrayContains("friendTask", idFriend);
-    }
-
-    public Task<DocumentSnapshot> getTaskById(String id){
-        return mCollection.document(id).get();
+    public DocumentReference getTaskById(String id){
+        return mCollection.document(id);
     }
 
     public Query getTaskFriends(String id){
@@ -60,6 +47,9 @@ public class TaskProvider {
         return mCollection.document(id).delete();
     }
 
+    public Task<Void> updateFriendsTask(ArrayList<String> arrayFriends, String idTask){
+        return mCollection.document(idTask).update("friendsTask", arrayFriends);
+    }
 
     public Task<Void> updateTask (TaskU taskU){
         // si se quiere actualizar mas valores simplemente se agrega un nuevo map.put
@@ -69,9 +59,8 @@ public class TaskProvider {
         map.put("descriptionTask", taskU.getDescriptionTask());
         map.put("dateTask", taskU.getDateTask());
         map.put("hourTask", taskU.getHourTask());
-        map.put("taskAlarmDate", taskU.getTaskAlarmDate());
-        map.put("friendsTask", taskU.getFriendsTask());
-        map.put("taskCheck", taskU.isTaskCheck());
+        // map.put("taskAlarmDate", taskU.getTaskAlarmDate());
+        // map.put("taskCheck", taskU.isTaskCheck());
         return mCollection.document(taskU.getId()).update(map);
     }
 

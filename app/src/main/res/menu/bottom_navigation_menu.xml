@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/itemOurTasks"
-        android:icon="@drawable/ic_group"
+        android:icon="@drawable/ic_group_white"
         android:title="Our tasks" />
     <item
         android:id="@+id/itemHome"

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,14 +17,13 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whatsmytask.R;
-import com.example.whatsmytask.models.TaskU;
 import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.TaskProvider;
 import com.example.whatsmytask.providers.UsersProvider;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -38,14 +36,17 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
     Context context;
     UsersProvider mUserProvider;
     AuthProvider mAuthProvider;
+    TaskProvider mTaskProvider;
     ArrayList<String> friendsList;
+    String mIdTask;
 
-    public FriendsWorkingAdapter(ArrayList<String> friendsList, Context context) {
+    public FriendsWorkingAdapter(ArrayList<String> friendsList, Context context, String idTask) {
         this.context = context;
         this.friendsList = friendsList;
         mAuthProvider = new AuthProvider();
         mUserProvider = new UsersProvider();
-
+        mTaskProvider = new TaskProvider();
+        mIdTask = idTask;
     }
 
     @NonNull
@@ -76,17 +77,17 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
                             showConfirmRemoveFriend(user);
                         }
                     });
-                }else{
-                    holder.mCardVFriendWorking.setVisibility(View.GONE);
                 }
             }
         });
     }
 
     private void showConfirmRemoveFriend(User user) {
+        friendsList.add(mAuthProvider.getUid());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.confirm_remove_friend, null);
+        View view = layoutInflater.inflate(R.layout.remove_friend_dialog, null);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
@@ -97,21 +98,24 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
 
         ImageView imgVCloseRemove;
         CircleImageView cImgVFriend;
-        TextView txtVFriendName;
+        TextView txtVFriendName , txtVTitleRemoveFriendDialog;
         Button btnCancelRemove, btnRemove;
 
         imgVCloseRemove = view.findViewById(R.id.imgVCloseRemoveFriend);
         cImgVFriend = view.findViewById(R.id.cImgVFriend);
         txtVFriendName = view.findViewById(R.id.txtFriendName);
+        txtVTitleRemoveFriendDialog = view.findViewById(R.id.txtVTitleRemoveFriendDialog);
         btnCancelRemove = view.findViewById(R.id.btnCancelRemove);
         btnRemove = view.findViewById(R.id.btnRemoveFriend);
 
+        txtVTitleRemoveFriendDialog.setText("REMOVE FROM TASK");
         Picasso.with(context).load(user.getImageProfile()).into(cImgVFriend);
         txtVFriendName.setText(user.getUserName());
 
         imgVCloseRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                friendsList.remove(mAuthProvider.getUid());
                 dialog.dismiss();
             }
         });
@@ -119,6 +123,7 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
         btnCancelRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                friendsList.remove(mAuthProvider.getUid());
                 dialog.dismiss();
             }
         });
@@ -126,7 +131,28 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
         btnRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Falta metodo remover user", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+                removeFriend(user.getId());
+            }
+        });
+
+    }
+
+    // quitando user del array y actualizar el array de la bd
+    private void removeFriend(String idFriend) {
+
+        for (int i = 0; i < friendsList.size(); i++) {
+            if (idFriend.equals(friendsList.get(i))){
+                friendsList.remove(i);
+            }
+        }
+
+        mTaskProvider.updateFriendsTask(friendsList, mIdTask).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(context, "Friend deleted", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

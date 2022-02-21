@@ -36,8 +36,9 @@ public class AddFriendActivity extends AppCompatActivity implements MaterialSear
     UsersProvider mUserProvider;
     AuthProvider mAuthProvider;
     RecyclerView mRecyclerView;
-    MaterialSearchBar mSearchBar;
 
+    MaterialSearchBar mSearchBar;
+    ImageView mImgVGoBack;
 
     String userName;
 
@@ -49,6 +50,14 @@ public class AddFriendActivity extends AppCompatActivity implements MaterialSear
 
         mUserProvider = new UsersProvider();
         mAuthProvider = new AuthProvider();
+
+        mImgVGoBack = findViewById(R.id.imgVGoBack);
+        mImgVGoBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerViewFriend);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AddFriendActivity.this);

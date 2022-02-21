@@ -19,12 +19,12 @@ public class FriendsProvider {
         mCollection.document(friend.getIdUser2()).collection("Users").document(friend.getIdUser1()).set(friend);
     }
 
-    public Task<Void> deleteFriendByIdUser1(Friend friend){
-        return mCollection.document(friend.getIdUser1()).collection("Users").document(friend.getIdUser2()).delete();
+    public Task<Void> deleteFriendByIdUser1(String idUser, String idFriend){
+        return mCollection.document(idUser).collection("Users").document(idFriend).delete();
     }
 
-    public Task<Void> deleteFriendByIdUser2(Friend friend){
-        return mCollection.document(friend.getIdUser2()).collection("Users").document(friend.getIdUser1()).delete();
+    public Task<Void> deleteFriendByIdUser2(String idFriend, String idUser){
+        return mCollection.document(idFriend).collection("Users").document(idUser).delete();
     }
 
     public Query getAll(String idUser){

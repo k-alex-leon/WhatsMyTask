@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/custom_border"
     android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="ADD FRIEND TO TASK"
+            android:gravity="center"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerSelectFriendsDialog"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_height="match_parent"/>
+
+        <Button
+            android:id="@+id/btnAddSelectFriensDialog"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/custom_border"
+            android:backgroundTint="@color/blue"
+            android:textColor="@color/white"
+            android:text="Add"/>
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/imgVCloseSelectFriendsDialog"
@@ -13,19 +44,4 @@
         android:layout_gravity="right"
         android:src="@drawable/ic_close_gray"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerSelectFriendsDialog"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="15dp"
-        android:layout_height="match_parent"/>
-
-    <Button
-        android:id="@+id/btnAddSelectFriensDialog"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/blue"
-        android:textColor="@color/white"
-        android:text="Add"/>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

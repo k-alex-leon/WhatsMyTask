@@ -1,6 +1,7 @@
 package com.example.whatsmytask.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,34 +10,32 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.whatsmytask.R;
 import com.example.whatsmytask.adapters.FriendsWorkingAdapter;
-import com.example.whatsmytask.adapters.TaskFriendAdapter;
 import com.example.whatsmytask.models.TaskU;
-import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.FriendsProvider;
 import com.example.whatsmytask.providers.TaskProvider;
 import com.example.whatsmytask.providers.UsersProvider;
-import com.example.whatsmytask.utils.ItemChecked;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 
 
 import org.jetbrains.annotations.NotNull;
@@ -54,10 +53,8 @@ public class TaskEditActivity extends AppCompatActivity {
     Button mBtnUpdateTask;
     CircleImageView mBtnCircleButtonBackTask;
     TextInputEditText mEditTaskTitle, mEditDescriptionTask;
-    ImageView mTaskImageDate, mTaskImageHour, mTaskImageDelete, mImageAddFriend;
+    ImageView mTaskImageDate, mTaskImageHour, mTaskImageDelete;
     TextView mEtUDate, mEtUHour;
-    String dateT, hourT;
-    LinearLayout mLlAddFriendsEdit;
 
     RecyclerView mRecyclerViewFriendsWorking;
     //le muestra al usuario que debe esperar mientras termina un proceso
@@ -66,17 +63,16 @@ public class TaskEditActivity extends AppCompatActivity {
     TaskProvider mTaskProvider;
     AuthProvider mAuthProvider;
     FriendsProvider mFriendsProvider;
-    TaskFriendAdapter mTaskFriendAdapter;
     TaskU mTaskU;
     UsersProvider mUserProvider;
     FriendsWorkingAdapter mFriendsWorkingAdapter;
     String mExtraTaskId;
 
 
-    String titleTask,descriptionTask,dateTask,hourTask;
     String mTaskTitle,mDescriptionTask,mDateTask,mHourTask;
 
     ArrayList<String> friendsIdArray , newEditFriendsArray;
+    ListenerRegistration mListenerRegistration = null;
 
 
     Calendar calendar = Calendar.getInstance();
@@ -104,7 +100,6 @@ public class TaskEditActivity extends AppCompatActivity {
         mTaskImageDate = findViewById(R.id.taskDate);
         mTaskImageHour = findViewById(R.id.taskHour);
         mTaskImageDelete = findViewById(R.id.imgDeleteTaskView);
-        mLlAddFriendsEdit = findViewById(R.id.lLAddFriendsEdit);
 
         mRecyclerViewFriendsWorking = findViewById(R.id.recyclerTeamEditTask);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
@@ -133,14 +128,6 @@ public class TaskEditActivity extends AppCompatActivity {
                 showConfirmDelete(mExtraTaskId);
             }
         });
-
-        mLlAddFriendsEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showFriendsList();
-            }
-        });
-
 
 
         // cuadro de carga (ALERT DIALOG)
@@ -210,7 +197,7 @@ public class TaskEditActivity extends AppCompatActivity {
                 calendar.set(Calendar.YEAR,year);
 
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                dateT = format.format(calendar.getTime());
+                String dateT = format.format(calendar.getTime());
                 mEtUDate.setText(dateT);
 
             }
@@ -219,35 +206,22 @@ public class TaskEditActivity extends AppCompatActivity {
     }
 
     private void getTask(){
-        mTaskProvider.getTaskById(mExtraTaskId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mListenerRegistration = mTaskProvider.getTaskById(mExtraTaskId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot.exists()){
-                    TaskU taskU = documentSnapshot.toObject(TaskU.class);
-                    if(documentSnapshot.contains("titleTask")){
-                        // titleTask = documentSnapshot.getString("titleTask");
-                        titleTask = taskU.getTitleTask();
-                    }
-                    if(documentSnapshot.contains("descriptionTask")){
-                        descriptionTask = documentSnapshot.getString("descriptionTask");
-                    }
-                    if(documentSnapshot.contains("hourTask")){
-                        hourTask = documentSnapshot.getString("hourTask");
-                    }
-                    if(documentSnapshot.contains("dateTask")){
-                        dateTask = documentSnapshot.getString("dateTask");
-                    }
-                    if (documentSnapshot.contains("friendsTask")){
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (value.exists()){
+                    TaskU taskU = value.toObject(TaskU.class);
+
+                    mEditTaskTitle.setText(taskU.getTitleTask());
+                    mEditDescriptionTask.setText(taskU.getDescriptionTask());
+                    mEtUDate.setText(taskU.getDateTask());
+                    mEtUHour.setText(taskU.getHourTask());
+
+                    if (taskU.getFriendsTask() != null){
                         friendsIdArray = taskU.getFriendsTask();
-                        showFriendsWorkingList();
+                        showFriendsWorkingList(taskU.getId());
                     }
-
-                    mEditTaskTitle.setText(titleTask);
-                    mEditDescriptionTask.setText(descriptionTask);
-                    mEtUDate.setText(dateTask);
-                    mEtUHour.setText(hourTask);
-
-
 
                 }
             }
@@ -255,89 +229,11 @@ public class TaskEditActivity extends AppCompatActivity {
 
     }
 
-    private void showFriendsList() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        View view = getLayoutInflater().inflate(R.layout.add_friend_dialog, null);
-        // obteniendo ref del layout
-        ImageView imgVCLose = view.findViewById(R.id.imgVCloseSelectFriendsDialog);
-        Button btnAdd = view.findViewById(R.id.btnAddSelectFriensDialog);
-        RecyclerView recyclerViewSelectFriends = view.findViewById(R.id.recyclerSelectFriendsDialog);
-
-        builder.setView(view);
-        AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.show();
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerViewSelectFriends.setLayoutManager(linearLayoutManager);
-
-        // haciendo consulta de lista de amigos
-        Query query = mFriendsProvider.getAll(mAuthProvider.getUid());
-        FirestoreRecyclerOptions<User> options =
-                new FirestoreRecyclerOptions.Builder<User>()
-                        .setQuery(query, User.class)
-                        .build();
-
-        mTaskFriendAdapter = new TaskFriendAdapter(options,this, new ItemChecked() {
-            @Override
-            public void itemSelected(ArrayList<String> array) {
-                newEditFriendsArray = array;
-            }
-        });
-        recyclerViewSelectFriends.setAdapter(mTaskFriendAdapter);
-        // esto escucha los cambios que se hagan en la db
-        mTaskFriendAdapter.startListening();
-
-
-        imgVCLose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTaskFriendAdapter.stopListening();
-                if (newEditFriendsArray.size() >= 1){
-                    // quitando los amigos seleccionados
-                    for (int i = 0; i < newEditFriendsArray.size(); i++){
-                        newEditFriendsArray.remove(i);
-                    }
-                    dialog.dismiss();
-                }else{
-                    dialog.dismiss();
-                }
-            }
-        });
-
-
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTaskFriendAdapter.stopListening();
-                if (newEditFriendsArray.size() < 1){
-                    Toast.makeText(view.getContext(), "Add a friend", Toast.LENGTH_SHORT).show();
-                }else{
-                    /*
-                    * if (newEditFriendsArray.size() > friendsIdArray.size()){
-                        // compara los valores con el anterior array
-                        for (int i = 0; i < friendsIdArray.size(); i++){
-                            // si el valor del nuevo es diferente lo agrega al viejo
-                            if (!newEditFriendsArray.get(i).equals(friendsIdArray.get(i))){
-                                friendsIdArray.add(newEditFriendsArray.get(i));
-                            }
-                            Log.d("OLDARRAY", friendsIdArray.get(i));
-                        }
-                    }
-                    * */
-                    dialog.dismiss();
-                }
-            }
-        });
-
-    }
-
-    private void showFriendsWorkingList() {
+    private void showFriendsWorkingList(String idTask) {
         if (friendsIdArray != null && friendsIdArray.size() > 1){
 
             // este adapter recibe un array con los id para luego hacer la consulta en la bd
-                mFriendsWorkingAdapter = new FriendsWorkingAdapter(friendsIdArray, TaskEditActivity.this);
+                mFriendsWorkingAdapter = new FriendsWorkingAdapter(friendsIdArray, TaskEditActivity.this, idTask);
                 mRecyclerViewFriendsWorking.setAdapter(mFriendsWorkingAdapter);
 
             }
@@ -363,13 +259,7 @@ public class TaskEditActivity extends AppCompatActivity {
             taskU.setDescriptionTask(mDescriptionTask);
             taskU.setDateTask(mDateTask);
             taskU.setHourTask(mHourTask);
-
-            if (newEditFriendsArray.size() >= 1){
-                taskU.setFriendsTask(newEditFriendsArray);
-            }else{
-                taskU.setFriendsTask(friendsIdArray);
-            }
-            taskU.setTaskAlarmDate(calendar.getTimeInMillis());
+            // taskU.setTaskAlarmDate(calendar.getTimeInMillis());
             updateTask(taskU);
 
         }else{
@@ -398,18 +288,44 @@ public class TaskEditActivity extends AppCompatActivity {
 
     //se encarga de mostrar una alerta antes de eliminar la tarea
     private void showConfirmDelete(String mExtraTaskId) {
-        new AlertDialog.Builder(TaskEditActivity.this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Delete task")
-                .setMessage("Do you want to delete this task?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteTask(mExtraTaskId);
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        View view = getLayoutInflater().inflate(R.layout.delete_dialog, null);
+        Button btnCancel, btnDelete;
+        ImageView imgVClose;
+        LottieAnimationView deleteAnimation;
+
+        deleteAnimation = view.findViewById(R.id.deleteAnimation);
+        imgVClose = view.findViewById(R.id.imgVCloseDelete);
+        btnCancel = view.findViewById(R.id.btnCancelDelete);
+        btnDelete = view.findViewById(R.id.btnDelete);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        imgVClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteTask(mExtraTaskId);
+                dialog.dismiss();
+            }
+        });
 
     }
 
@@ -429,5 +345,11 @@ public class TaskEditActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mListenerRegistration != null){
+            mListenerRegistration.remove();
+        }
+    }
 }

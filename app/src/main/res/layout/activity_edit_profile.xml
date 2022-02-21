@@ -19,7 +19,7 @@
         android:id="@+id/imageViewCover"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/notepaper"
+        android:src="@drawable/bakgroundtask"
         android:scaleType="centerCrop"
         android:alpha="0.8"
         android:transitionName="@string/transition_picture"
@@ -27,31 +27,35 @@
 
 
         <RelativeLayout
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center|top"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="100dp"
             android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/circleImageProfile"
+            <RelativeLayout
                 android:layout_width="140dp"
                 android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
-                android:layout_height="140dp"
-                android:src="@drawable/ic_person_white"
-                app:civ_circle_background_color="@color/darkGray"
-                android:layout_marginTop="100dp"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="5dp"
-                />
+                android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/circleImageProfile"
-                android:src="@drawable/ic_edit"
-                app:civ_border_color="@color/white" />
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageProfile"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:src="@drawable/ic_person_white"
+                    app:civ_circle_background_color="@color/gray"
+                    app:civ_border_color="@color/white"
+                    app:civ_border_width="5dp"/>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerHorizontal="true"
+                    app:civ_circle_background_color="@color/gray"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_edit_white" />
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
 
 
@@ -113,6 +117,7 @@
     <Button
         android:id="@+id/btnEditProfile"
         android:backgroundTint="@color/light_blue"
+        android:background="@drawable/custom_border"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="UPDATE"
@@ -121,6 +126,7 @@
         android:layout_marginRight="15dp"
         android:layout_marginBottom="20dp"
         android:textSize="17dp"
+        android:textColor="@color/white"
         android:layout_gravity="bottom"
         />
 

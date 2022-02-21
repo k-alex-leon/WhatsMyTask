@@ -236,10 +236,12 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
 
                 <Button
                     android:id="@+id/btnSaveTask"
+                    android:background="@drawable/custom_border"
                     android:backgroundTint="@color/light_blue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

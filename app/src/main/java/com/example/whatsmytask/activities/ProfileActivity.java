@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.example.whatsmytask.R;
 import com.example.whatsmytask.adapters.UserFriendsAdapter;
-import com.example.whatsmytask.models.Friend;
 import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.FriendsProvider;
@@ -31,35 +30,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ImageView mImageViewEditProfile;
-    CircleImageView mImageViewCircleBack;
-    CircleImageView mCircleImageViewProfile;
-    TextView mEmailTextView;
-    TextView mNameTextView;
-    TextView mTaskTextView;
-    FloatingActionButton mFabAddFriend;
-    UserFriendsAdapter mUserFriendAdapter;
-    RecyclerView mRecyclerView;
     FriendsProvider mFriendsProvider;
     UsersProvider mUsersProvider;
     AuthProvider mAuthProvider;
     TaskProvider mTaskProvider;
 
+    ImageView mImageViewEditProfile;
+    CircleImageView mImageViewCircleBack, mCircleImageViewProfile;
+    TextView mEmailTextView, mNameTextView;
+    FloatingActionButton mFabAddFriend;
+    UserFriendsAdapter mUserFriendAdapter;
+    RecyclerView mRecyclerView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_session);
+        setContentView(R.layout.activity_profile);
 
         mImageViewEditProfile = findViewById(R.id.imageViewEditProfile);
         mImageViewCircleBack = findViewById(R.id.circleImageBack);
 
-
         mCircleImageViewProfile = findViewById(R.id.circleImageViewProfile);
         mNameTextView = findViewById(R.id.textViewName);
         mEmailTextView = findViewById(R.id.textViewEmail);
-        mTaskTextView = findViewById(R.id.textTaskView);
         mFabAddFriend = findViewById(R.id.fabAddFriend);
         mRecyclerView = findViewById(R.id.recyclerViewUserFriends);
 
@@ -71,10 +65,12 @@ public class ProfileActivity extends AppCompatActivity {
         mAuthProvider = new AuthProvider();
         mTaskProvider = new TaskProvider();
 
+        // agregar amigo
         mFabAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToAddFriend();
+                Intent intent = new Intent(ProfileActivity.this,AddFriendActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -89,12 +85,13 @@ public class ProfileActivity extends AppCompatActivity {
         mImageViewEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToEditProfile();
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
             }
         });
 
         getUser();
-        getTaskUser();
+
     }
 
     // se hace consulta a la db
@@ -120,32 +117,6 @@ public class ProfileActivity extends AppCompatActivity {
         mUserFriendAdapter.stopListening();
     }
 
-    // metodo para ir a la actividad agregar amigo
-    private void goToAddFriend() {
-        Intent intent = new Intent(ProfileActivity.this,AddFriendActivity.class);
-        startActivity(intent);
-    }
-
-    private void goToEditProfile() {
-        Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-        startActivity(intent);
-    }
-
-    // obtener la cantidad de tareas del user
-    private void getTaskUser(){
-        mTaskProvider.getTaskByUser(mAuthProvider.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                //Devuelve la cantidad de caracteres
-                int numberTask = queryDocumentSnapshots.size();
-                //String.valueOf(mTaskTextView) = Transforma el int a string
-                mTaskTextView.setText(String.valueOf(numberTask));
-
-            }
-        });
-
-    }
     // obtener data del user
     private void getUser(){
         mUsersProvider.getUser(mAuthProvider.getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
