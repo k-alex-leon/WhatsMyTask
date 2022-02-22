@@ -31,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
+            android:textAllCaps="true"
             android:textStyle="bold"/>
 
         <LinearLayout
@@ -45,7 +46,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@color/gray"
+                android:background="@drawable/custom_border"
+                android:backgroundTint="@color/gray"
                 android:layout_margin="5dp"
                 android:text="Cancel"/>
 
@@ -54,7 +56,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@color/blue"
+                android:background="@drawable/custom_border"
+                android:backgroundTint="@color/blue"
                 android:layout_margin="5dp"
                 android:text="Remove"
                 android:textColor="@color/white"/>

@@ -12,7 +12,7 @@ import com.example.whatsmytask.providers.TaskProvider;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-public class AlertReceiver extends BroadcastReceiver {
+public class AlertReceiver extends BroadcastReceiver{
 
 
     @Override

@@ -91,7 +91,8 @@ public class HomeFragment extends Fragment {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToNewTask();
+                Intent intent = new Intent(getContext(), NewTaskActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -119,20 +120,6 @@ public class HomeFragment extends Fragment {
         mTaskAdapter.startListening();
     }
 
-
-/**
-    // cuando la app esta en segundo plano deja de escuchar la db
-    @Override
-    public void onStop() {
-        super.onStop();
-        mTaskAdapter.stopListening();
-    }
-    **/
-
-    private void goToNewTask() {
-        Intent intent = new Intent(getContext(), NewTaskActivity.class);
-        startActivity(intent);
-    }
 
     // PERMITE INSTANCIAR EL MENU
 

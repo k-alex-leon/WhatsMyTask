@@ -2,8 +2,6 @@ package com.example.whatsmytask.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whatsmytask.R;
-import com.example.whatsmytask.models.Friend;
 import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.FriendsProvider;
@@ -94,7 +91,7 @@ public class UserFriendsAdapter extends FirestoreRecyclerAdapter<User, UserFrien
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.remove_friend_dialog, null);
+        View view = layoutInflater.inflate(R.layout.friend_dialog, null);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();

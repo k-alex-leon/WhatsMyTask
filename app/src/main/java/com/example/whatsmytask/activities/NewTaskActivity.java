@@ -252,13 +252,25 @@ public class NewTaskActivity extends AppCompatActivity{
         String hourSelected = mEtHour.getText().toString();
 
         if(!mTitleTask.isEmpty() && !mDescriptionTask.isEmpty()){
+            if (mTitleTask.length() < 40){
 
-            if (!dateSeleted.isEmpty() && !hourSelected.isEmpty()){
-                // mDialog.show();
-                createTask();
+                if (mDescriptionTask.length() > 40){
+
+                    if (!dateSeleted.isEmpty() && !hourSelected.isEmpty()){
+                        // mDialog.show();
+                        createTask();
+                    }else{
+                        Toast.makeText(this, "Select hour and date", Toast.LENGTH_LONG).show();
+                    }
+
+                }else{
+                    mTextInputDescriptionTask.setError("Description too short (40 min)");
+                }
+
             }else{
-                Toast.makeText(this, "Select hour and date", Toast.LENGTH_LONG).show();
+                mTextInputTaskTitle.setError("Title too long (40 max)");
             }
+
 
         }else{
             Toast.makeText(this, "Oops it seems that something is missing", Toast.LENGTH_LONG).show();
@@ -281,7 +293,7 @@ public class NewTaskActivity extends AppCompatActivity{
         taskU.setDateTask(dateT);
         taskU.setHourTask(hourT);
         taskU.setTaskAlarmDate(calendar.getTimeInMillis());
-        if(friendsId.size() <= 1){
+        if(friendsId.size() < 1){
             taskU.setFriendsTask(null);
         }else{
             friendsId.add(mAuthProvider.getUid());

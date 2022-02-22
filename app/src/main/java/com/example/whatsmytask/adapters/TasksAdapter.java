@@ -5,11 +5,14 @@ package com.example.whatsmytask.adapters;
 import static com.example.whatsmytask.R.drawable.*;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whatsmytask.R;
@@ -37,6 +41,7 @@ import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.NotificationProvider;
 import com.example.whatsmytask.providers.TaskProvider;
 import com.example.whatsmytask.providers.TokenProvider;
+import com.example.whatsmytask.providers.UsersProvider;
 import com.example.whatsmytask.utils.AlertReceiver;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -64,8 +69,10 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
     Context context;
     AuthProvider mAuthProvider;
-    String idUser, idUserTask;
+    String idUser;
     TaskProvider mTaskProvider;
+    UsersProvider mUserProvider;
+    FriendsTeamAdapter mFriendsTeamAdapter;
 
 
     public TasksAdapter(FirestoreRecyclerOptions<TaskU> options, Context context){
@@ -78,7 +85,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
     @Override
     protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull TaskU taskU) {
         DocumentSnapshot document = getSnapshots().getSnapshot(position);
-        final String TaskId = document.getId();
+        final String taskId = document.getId();
 
         int odd = position % 2;
 
@@ -105,9 +112,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
             Intent intent = new Intent(context, AlertReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
-            taskU.setId(TaskId);
-            taskU.setTaskCheck(false);
-            mTaskProvider.updateTask(taskU);
+
 
         }
 
@@ -116,9 +121,9 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 if (isChecked){
-                    taskU.setId(TaskId);
+                    taskU.setId(taskId);
                     taskU.setTaskCheck(true);
-                    mTaskProvider.updateTask(taskU);
+                    mTaskProvider.updateTaskStatus(taskU);
                 }else {
 
                     if(odd == 1){
@@ -134,7 +139,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
                     //si la tarea no es cumplida se enviara alerta
-                    taskU.setId(TaskId);
+                    taskU.setId(taskId);
                     taskU.setTaskCheck(false);
                     mTaskProvider.updateTask(taskU);
                 }
@@ -144,7 +149,6 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         });
 
         idUser = mAuthProvider.getUid();
-        idUserTask = taskU.getIdUser();
         // comprobar que el que crea la tarea sea el unico que puede editar
 
         if(taskU.getIdUser().contentEquals(idUser)){
@@ -152,7 +156,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, TaskEditActivity.class);
-                    intent.putExtra("id",TaskId);
+                    intent.putExtra("id",taskId);
                     context.startActivity(intent);
                 }
             });
@@ -160,17 +164,76 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
         }
         // para usuarios agregados a la tarea
         else if(!taskU.getIdUser().contentEquals(idUser)){
-
+            holder.checkboxTask.setVisibility(View.GONE);
             holder.imageViewEditTask.setImageResource(ic_eye);
             holder.imageViewEditTask.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, "Falta agregar popup", Toast.LENGTH_SHORT).show();
+                    showTaskInfoDialog(taskU);
                 }
             });
         }
 
 
+    }
+
+    private void showTaskInfoDialog(TaskU taskU) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.task_info_dialog, null);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        RecyclerView recyclerVTeamTaskInfo;
+        ImageView imgVCloseTaskInfoDialog, cImgVUserInfoTask;
+        TextView txtVTitleInfoTask, txtVUsernameInfoTask,
+                txtVEmailInfoTask, txtVHourInfoTask, txtVDateInfoTask,
+                txtVDescriptionInfoTask;
+
+        cImgVUserInfoTask = view.findViewById(R.id.cImgVUserInfoTask);
+        txtVUsernameInfoTask = view.findViewById(R.id.txtVUsernameInfoTask);
+        txtVEmailInfoTask = view.findViewById(R.id.txtVEmailInfoTask);
+
+        txtVTitleInfoTask = view.findViewById(R.id.txtVTitleInfoTask);
+        txtVHourInfoTask = view.findViewById(R.id.txtVHourInfoTask);
+        txtVDateInfoTask = view.findViewById(R.id.txtVDateInfoTask);
+        txtVDescriptionInfoTask = view.findViewById(R.id.txtVDescriptionInfoTask);
+
+        recyclerVTeamTaskInfo = view.findViewById(R.id.recyclerVTeamTaskInfo);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
+        recyclerVTeamTaskInfo.setLayoutManager(linearLayoutManager);
+
+        mFriendsTeamAdapter = new FriendsTeamAdapter(taskU.getFriendsTask(), context, taskU.getId());
+        recyclerVTeamTaskInfo.setAdapter(mFriendsTeamAdapter);
+
+        mUserProvider.getUser(taskU.getIdUser()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()){
+                    if (documentSnapshot.contains("imageProfile")){
+                        Picasso.with(context).load(documentSnapshot.getString("imageProfile")).into(cImgVUserInfoTask);
+                    }
+                    txtVUsernameInfoTask.setText(documentSnapshot.getString("userName"));
+                    txtVEmailInfoTask.setText(documentSnapshot.getString("email"));
+                }
+            }
+        });
+
+        txtVTitleInfoTask.setText(taskU.getTitleTask());
+        txtVDescriptionInfoTask.setText(taskU.getDescriptionTask());
+        txtVHourInfoTask.setText(taskU.getHourTask());
+        txtVDateInfoTask.setText(taskU.getDateTask());
+
+        imgVCloseTaskInfoDialog = view.findViewById(R.id.imgVCloseTaskInfoDialog);
+        imgVCloseTaskInfoDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     // INSTANCIAMOS LA VISTA QUE QUEREMOS USAR
@@ -183,6 +246,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
     // INSTANCIAMOS CADA UNA DE LAS VISTAS DEL CARDVIEW
     public class ViewHolder extends RecyclerView.ViewHolder{
+
         TextView textViewTitle;
         TextView textViewDescription;
         TextView textViewDate, textViewHour;
@@ -193,6 +257,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
         public ViewHolder(View view){
             super(view);
+
             textViewTitle = view.findViewById(R.id.textViewTitlePostCard);
             textViewDescription = view.findViewById(R.id.textViewDescriptionPostCard);
             textViewDate = view.findViewById(R.id.textViewDatePostCard);
@@ -203,6 +268,7 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
 
             mAuthProvider = new AuthProvider();
             mTaskProvider = new TaskProvider();
+            mUserProvider = new UsersProvider();
         }
 
     }

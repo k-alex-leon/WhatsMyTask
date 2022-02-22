@@ -87,7 +87,7 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.remove_friend_dialog, null);
+        View view = layoutInflater.inflate(R.layout.friend_dialog, null);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();

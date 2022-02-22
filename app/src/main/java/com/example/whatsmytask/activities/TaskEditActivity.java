@@ -205,6 +205,7 @@ public class TaskEditActivity extends AppCompatActivity {
         dpd.show();
     }
 
+    // obtenemos info de la tarea a editar
     private void getTask(){
         mListenerRegistration = mTaskProvider.getTaskById(mExtraTaskId)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -267,8 +268,6 @@ public class TaskEditActivity extends AppCompatActivity {
             Toast.makeText(this, "Oops it seems that something is missing", Toast.LENGTH_LONG).show();
         }
 
-
-
     }
 
     private void updateTask(TaskU taskU) {
@@ -286,24 +285,24 @@ public class TaskEditActivity extends AppCompatActivity {
         });
     }
 
-    //se encarga de mostrar una alerta antes de eliminar la tarea
+    //se encarga de mostrar un alertdialog antes de eliminar la tarea
     private void showConfirmDelete(String mExtraTaskId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         View view = getLayoutInflater().inflate(R.layout.delete_dialog, null);
-        Button btnCancel, btnDelete;
-        ImageView imgVClose;
-        LottieAnimationView deleteAnimation;
-
-        deleteAnimation = view.findViewById(R.id.deleteAnimation);
-        imgVClose = view.findViewById(R.id.imgVCloseDelete);
-        btnCancel = view.findViewById(R.id.btnCancelDelete);
-        btnDelete = view.findViewById(R.id.btnDelete);
 
         builder.setView(view);
         AlertDialog dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
+
+        Button btnCancel, btnDelete;
+        ImageView imgVClose;
+
+        imgVClose = view.findViewById(R.id.imgVCloseDelete);
+        btnCancel = view.findViewById(R.id.btnCancelDelete);
+        btnDelete = view.findViewById(R.id.btnDelete);
+
 
         imgVClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -329,7 +328,7 @@ public class TaskEditActivity extends AppCompatActivity {
 
     }
 
-    //este metodo necesita el id de la tarea
+
     private void deleteTask(String mExtraTaskId) {
         mTaskProvider.deleteTask(mExtraTaskId).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

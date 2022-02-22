@@ -1,12 +1,17 @@
 package com.example.whatsmytask.fragments;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,6 +19,8 @@ import android.widget.TextView;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.whatsmytask.R;
+import com.example.whatsmytask.activities.MainActivity;
+import com.example.whatsmytask.activities.ProfileActivity;
 import com.example.whatsmytask.providers.AuthProvider;
 import com.example.whatsmytask.providers.TaskProvider;
 import com.github.mikephil.charting.charts.PieChart;
@@ -84,6 +91,11 @@ public class DashboardFragment extends Fragment {
         mAuthProvider = new AuthProvider();
 
         mView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        mToolbar = mView.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dashboard");
+        setHasOptionsMenu(true);
 
         textViewTaskSize = mView.findViewById(R.id.allTaskSize);
         textViewPendingTaskSize = mView.findViewById(R.id.pendingTaskSize);
@@ -173,5 +185,34 @@ public class DashboardFragment extends Fragment {
         graphRadarChart.getDescription().setText("Tap to refresh.");
         graphRadarChart.setData(radarData);
 
+    }
+
+    // PERMITE INSTANCIAR EL MENU
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.main_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.itemLogout){
+            logout();
+        }if (item.getItemId()== R.id.itmeSession){
+            Intent intent = new Intent(getContext(), ProfileActivity.class);
+            startActivity(intent);
+        }
+
+        return true;
+    }
+
+    // cerrar la sesion
+
+    private void logout() {
+        mAuthProvider.logout();
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

@@ -51,6 +51,10 @@ public class TaskProvider {
         return mCollection.document(idTask).update("friendsTask", arrayFriends);
     }
 
+    public Task<Void> updateTaskStatus(TaskU taskU){
+        return mCollection.document(taskU.getId()).update("taskCheck", taskU.isTaskCheck());
+    }
+
     public Task<Void> updateTask (TaskU taskU){
         // si se quiere actualizar mas valores simplemente se agrega un nuevo map.put
         Map<String,Object> map = new HashMap<>();
