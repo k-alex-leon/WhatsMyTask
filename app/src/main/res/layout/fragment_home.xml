@@ -8,13 +8,12 @@
     android:layout_marginBottom="55dp">
 
     <!-- AGREGA EL TOOLBAR AL FRAGMENT -->
-    <include layout="@layout/action_bar_toolbar"/>
+    <!-- <include layout="@layout/action_bar_toolbar"/> -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_marginTop="55dp">
+        android:orientation="vertical">
 
         <!--app:layout_behavor Hace que las tareas creadas no se paren sobre el toolbar -->
         <!--app:layout_behavor="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" -->

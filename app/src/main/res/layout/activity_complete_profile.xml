@@ -5,107 +5,129 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activities.RegisterActivity">
+    tools:context=".activities.CompleteProfileActivity">
 
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
 
-        <!--
-        REGISTER BOX
-        -->
-
-        <io.github.florent37.shapeofview.shapes.ArcView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:elevation="4dp"
-            app:shape_arc_height="20dp"
-            app:shape_arc_position="bottom">
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-            <View
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:background="@drawable/bakgroundtask">
+
+                <ImageView
+                    android:id="@+id/imageRegisterGoBack"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/ic_arrow_back" />
+
+            </RelativeLayout>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/blue"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center">
-                <TextView
+                app:cardCornerRadius="15dp"
+                android:outlineSpotShadowColor="@color/colorAccent"
+                android:layout_marginTop="150dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="ALMOST DONE"
-                    android:textColor="@color/design_default_color_on_primary"
-                    android:textAlignment="center"
-                    android:textSize="30dp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="20dp"
-                    />
-                <ImageView
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    android:src="@drawable/ic_person_pin"
-                    />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-            </LinearLayout>
-        </io.github.florent37.shapeofview.shapes.ArcView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-        <!--
-        INPUT USER NAME
-        -->
+                        <!--
+                        INPUT USER NAME
+                        -->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="30dp"
+                            android:layout_marginRight="10dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_person_gray" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/textInputUserName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="User name"
+                                    android:inputType="text" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_weight="1"
+                        android:gravity="center">
+                        <!--
+                            BUTTON LOGIN
+                        -->
+                        <Button
+                            android:id="@+id/btnConfirm"
+                            android:backgroundTint="@color/light_blue"
+                            android:background="@drawable/custom_border"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Let's go!"
+                            android:textColor="@color/white"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:textSize="17dp"
+                            android:layout_alignParentBottom="true"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <ImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:src="@drawable/ic_person_gray"
-                android:layout_marginTop="28dp"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginRight="10dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/textInputUserName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="User name"
-                    android:inputType="text"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_person_white"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
-
-   </LinearLayout>
-
-    <!--
-         BUTTON LOGIN
-         -->
-    <Button
-        android:id="@+id/btnConfirm"
-        android:backgroundTint="@color/light_blue"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="CONFIRM"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="20dp"
-        android:textSize="17dp"
-        android:layout_gravity="bottom"
-        />
+    </ScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

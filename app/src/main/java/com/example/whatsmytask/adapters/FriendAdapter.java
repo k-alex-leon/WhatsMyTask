@@ -2,16 +2,17 @@ package com.example.whatsmytask.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.whatsmytask.R;
@@ -24,22 +25,19 @@ import com.example.whatsmytask.providers.FriendsProvider;
 import com.example.whatsmytask.providers.NotificationProvider;
 import com.example.whatsmytask.providers.TokenProvider;
 import com.example.whatsmytask.providers.UsersProvider;
-import com.example.whatsmytask.utils.ItemChecked;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.picasso.Picasso;
 
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,8 +51,7 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
     AuthProvider mAuthProvider;
     FriendsProvider mFriendProvider;
     UsersProvider mUserProvider;
-    String idUserFriend, idUserProfile, bodyNoti;
-
+    String mIdUserFriend, mIdUserProfile, mBodyNoti;
 
 
     public FriendAdapter(FirestoreRecyclerOptions<User> options, Context context) {
@@ -63,15 +60,13 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
     }
 
 
-
-
     // ESTABLECE EL CONTENIDO QUE SE QUIERE MOSTRAR
     @Override
     protected void onBindViewHolder(@NotNull FriendAdapter.ViewHolder holder, int position,@NotNull User user) {
 
-        idUserProfile = mAuthProvider.getUid();
+        mIdUserProfile = mAuthProvider.getUid();
 
-        idUserFriend = user.getId();
+        mIdUserFriend = user.getId();
             holder.textViewNameFriend.setText(user.getUserName());
             holder.textViewEmailFriend.setText(user.getEmail());
             if(user.getImageProfile() != null){
@@ -80,13 +75,13 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
                 }
             }
 
-            if (idUserProfile.contentEquals(idUserFriend)){
+            if (mIdUserProfile.contentEquals(mIdUserFriend)){
                 holder.mImageViewAddFriend.setVisibility(View.GONE);
             }else{
                 holder.mImageViewAddFriend.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        showConfirmAddFriend();
+                        showConfirmAddFriend(user);
                     }
                 });
 
@@ -97,39 +92,74 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
 
 
     //se encarga de mostrar una alerta antes de agregar contacto
-    private void showConfirmAddFriend() {
-        new AlertDialog.Builder(context)
-                .setIcon(android.R.drawable.ic_input_add)
-                .setTitle("Add firend")
-                .setMessage("Do you want add this person?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+    private void showConfirmAddFriend(User user) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = layoutInflater.inflate(R.layout.friend_dialog, null);
+
+        builder.setView(view);
+        AlertDialog dialog = builder.create();
+        // quitamos el background del dialog para pasarle el custom_border
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        ImageView imgVClose;
+        TextView txtVTitleFriendDialog, txtVNameFriendDialog;
+        CircleImageView cImgVFriend;
+        Button btnCancel, btnAccept;
+
+        txtVTitleFriendDialog = view.findViewById(R.id.txtVTitleFriendDialog);
+        txtVNameFriendDialog = view.findViewById(R.id.txtVNameFriendDialog);
+        cImgVFriend = view.findViewById(R.id.cImgVFriendDialog);
+
+        if (!user.getImageProfile().isEmpty()){
+            Picasso.with(context).load(user.getImageProfile()).into(cImgVFriend);
+        }
+        txtVTitleFriendDialog.setText("ADD NEW FRIEND");
+        txtVNameFriendDialog.setText(user.getUserName());
+
+        imgVClose = view.findViewById(R.id.imgVCloseFriendDialog);
+        imgVClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnCancel = view.findViewById(R.id.btnCancelFriendDialog);
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnAccept = view.findViewById(R.id.btnAcceptFriendDialog);
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUserProvider.getUser(mIdUserProfile).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        mUserProvider.getUser(idUserProfile).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                if (documentSnapshot.contains("userName")){
-                                    bodyNoti = documentSnapshot.getString("userName");
-                                    sendNotification(bodyNoti);
-                                    createFriend(idUserFriend);
-                                }
-
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()){
+                            if (documentSnapshot.contains("userName")){
+                                dialog.dismiss();
+                                mBodyNoti = documentSnapshot.getString("userName");
+                                sendNotification(mBodyNoti);
+                                createFriend(mIdUserFriend);
                             }
-                        });
-
-
+                        }
                     }
-                })
-                .setNegativeButton("No", null)
-                .show();
-
+                });
+            }
+        });
     }
 
 
     private void createFriend(String idUserFriend){
         Friend friend = new Friend();
-        friend.setIdUser1(idUserProfile);
+        friend.setIdUser1(mIdUserProfile);
         friend.setIdUser2(idUserFriend);
 
         mFriendProvider.createFriend(friend);
@@ -138,10 +168,10 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
 
     // enviar notificacion de nuevo contacto al otro usuario
     private void sendNotification(String bodyNoti) {
-        if(idUserFriend == null){
+        if(mIdUserFriend == null){
             return;
         }
-        mTokenProvider.getToken(idUserFriend).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mTokenProvider.getToken(mIdUserFriend).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
@@ -191,11 +221,8 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewNameFriend;
-        TextView textViewEmailFriend;
-        TextView textViewNumberFriend;
-        ImageView mImageProfileViewFriend;
-        ImageView mImageViewAddFriend;
+        TextView textViewNameFriend, textViewEmailFriend;
+        ImageView mImageProfileViewFriend, mImageViewAddFriend;
 
 
         public ViewHolder(View view) {
@@ -210,9 +237,6 @@ public class FriendAdapter extends FirestoreRecyclerAdapter<User, FriendAdapter.
         textViewEmailFriend = view.findViewById(R.id.textViewEmailPostCard);
             mImageProfileViewFriend = view.findViewById(R.id.imageFriendProfile);
             mImageViewAddFriend = view.findViewById(R.id.imageViewAddFriend);
-
-
-
 
         }
     }

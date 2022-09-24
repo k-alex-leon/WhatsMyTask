@@ -46,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 
 public class TaskEditActivity extends AppCompatActivity {
 
@@ -58,7 +57,7 @@ public class TaskEditActivity extends AppCompatActivity {
 
     RecyclerView mRecyclerViewFriendsWorking;
     //le muestra al usuario que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    // AlertDialog mDialog;
 
     TaskProvider mTaskProvider;
     AuthProvider mAuthProvider;
@@ -131,10 +130,10 @@ public class TaskEditActivity extends AppCompatActivity {
 
 
         // cuadro de carga (ALERT DIALOG)
-        mDialog = new SpotsDialog.Builder()
+        /** mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Loading")
-                .setCancelable(false).build();
+                .setCancelable(false).build(); **/
 
         // IMGVIEW QUE ABRE EL CALENDARIO
         mTaskImageDate.setOnClickListener(new View.OnClickListener() {
@@ -244,7 +243,7 @@ public class TaskEditActivity extends AppCompatActivity {
 
     private void validateUpdateTask(){
 
-        mDialog.show();
+        // mDialog.show();
 
          mTaskTitle = mEditTaskTitle.getText().toString();
          mDescriptionTask = mEditDescriptionTask.getText().toString();
@@ -264,7 +263,7 @@ public class TaskEditActivity extends AppCompatActivity {
             updateTask(taskU);
 
         }else{
-            mDialog.dismiss();
+            // mDialog.dismiss();
             Toast.makeText(this, "Oops it seems that something is missing", Toast.LENGTH_LONG).show();
         }
 
@@ -275,7 +274,7 @@ public class TaskEditActivity extends AppCompatActivity {
         mTaskProvider.updateTask(taskU).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> taskUpdate) {
-                mDialog.dismiss();
+                // mDialog.dismiss();
                 if (taskUpdate.isSuccessful()){
                     Toast.makeText(TaskEditActivity.this, "Task Updated", Toast.LENGTH_LONG).show();
                     finish();

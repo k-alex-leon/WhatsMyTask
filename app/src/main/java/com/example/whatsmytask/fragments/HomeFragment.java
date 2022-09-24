@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_home, container, false);
         mFab = mView.findViewById(R.id.fab);
         mToolbar = mView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("My tasks");
         setHasOptionsMenu(true);
         mAuthProvider = new AuthProvider();

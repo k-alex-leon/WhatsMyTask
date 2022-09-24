@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import dmax.dialog.SpotsDialog;
 
 public class CompleteProfileActivity extends AppCompatActivity {
 
@@ -36,7 +35,7 @@ public class CompleteProfileActivity extends AppCompatActivity {
     UsersProvider mUserProvider;
     // spot aler dialog
     //le muestra al usuerio que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    // AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +50,10 @@ public class CompleteProfileActivity extends AppCompatActivity {
         mUserProvider = new UsersProvider();
 
         // cuadro de carga
-        mDialog = new SpotsDialog.Builder()
+        /**mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Loading")
-                .setCancelable(false).build();
+                .setCancelable(false).build();**/
 
 
         // el btn register inicia metodo register();
@@ -91,14 +90,14 @@ public class CompleteProfileActivity extends AppCompatActivity {
         user.setUserName(userName);
         user.setId(id);
         user.setTimestamp(new Date().getTime());
-        mDialog.show();
+        // mDialog.show();
         //collection es la coleccion de la bd
         //.document() = agrega por el id en la coleccion seleccionada
         //.update = para agregar el username sin sobrescribir los datos registrados
         mUserProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                mDialog.dismiss();
+                // mDialog.dismiss();
                 if (task.isSuccessful()){
                     Intent intent = new Intent(CompleteProfileActivity.this, HomeActivity.class);
                     startActivity(intent);

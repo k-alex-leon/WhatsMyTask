@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.whatsmytask"
         minSdkVersion 19
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -30,15 +30,15 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'io.github.florent37:shapeofview:1.4.7'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation 'com.google.firebase:firebase-storage:20.0.0'
-    implementation 'id.zelory:compressor:2.1.0'
+    // implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
 
@@ -49,7 +49,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.6.0')
     implementation 'com.google.firebase:firebase-firestore'
 
-    implementation 'com.github.d-max:spots-dialog:1.1@aar'
+    // implementation 'com.github.d-max:spots-dialog:1.1@aar'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // FirebaseUI for Cloud Firestore
     implementation 'com.firebaseui:firebase-ui-firestore:7.1.1'
@@ -67,11 +67,12 @@ dependencies {
     // lottie animaciones
     implementation 'com.airbnb.android:lottie:4.2.2'
 
-    implementation "androidx.work:work-runtime:2.6.0-beta01"
+    //implementation "androidx.work:work-runtime:2.8.0-alpha04"
+    implementation("androidx.work:work-runtime:2.7.1")
 
     testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // graficos
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'

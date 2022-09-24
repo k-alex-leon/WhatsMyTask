@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_border"
+    android:theme="@style/AppTheme"
     android:padding="10dp">
     
     <LinearLayout
@@ -12,22 +13,24 @@
         android:gravity="center|top">
 
         <TextView
-            android:id="@+id/txtVTitleRemoveFriendDialog"
+            android:id="@+id/txtVTitleFriendDialog"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
             android:textSize="20dp"
             android:textStyle="bold"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/cImgVFriend"
+            android:id="@+id/cImgVFriendDialog"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_margin="20dp"
             android:src="@drawable/ic_person_gray"/>
 
         <TextView
-            android:id="@+id/txtFriendName"
+            android:id="@+id/txtVNameFriendDialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
@@ -42,7 +45,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btnCancelRemove"
+                android:id="@+id/btnCancelFriendDialog"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -52,21 +55,21 @@
                 android:text="Cancel"/>
 
             <Button
-                android:id="@+id/btnRemoveFriend"
+                android:id="@+id/btnAcceptFriendDialog"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@drawable/custom_border"
                 android:backgroundTint="@color/blue"
                 android:layout_margin="5dp"
-                android:text="Remove"
+                android:text="ACCEPT"
                 android:textColor="@color/white"/>
         </LinearLayout>
         
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imgVCloseRemoveFriend"
+        android:id="@+id/imgVCloseFriendDialog"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="right"

@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:background="@drawable/custom_border"
+    android:theme="@style/AppTheme"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -14,6 +15,7 @@
 
         <TextView
             android:id="@+id/txtVTitleInfoTask"
+            android:textAllCaps="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"

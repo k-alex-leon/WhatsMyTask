@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dmax.dialog.SpotsDialog;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -41,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         UsersProvider mUsersProvider;
     // spot aler dialog
     //le muestra al usuario que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    // AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +58,10 @@ public class RegisterActivity extends AppCompatActivity {
         mUsersProvider = new UsersProvider();
 
         // cuadro de carga
-        mDialog = new SpotsDialog.Builder()
+        /** mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Loading")
-                .setCancelable(false).build();
+                .setCancelable(false).build(); **/
 
         // Accion de la flecha sup izq
         //El metodo finish devuelve a la pagina anterior
@@ -77,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                register();
+                validateRegister();
             }
         });
     }
@@ -87,7 +86,7 @@ public class RegisterActivity extends AppCompatActivity {
     //se adquiere los valores del form
     //.getText() = para adquirir el texto del campo
     //.toString = transformar el texto en una cadena
-    private void register() {
+    private void validateRegister() {
         String userName = mTextInputName.getText().toString();
         String email = mTextInputEmail.getText().toString();
         String password = mTextInputPassword.getText().toString();
@@ -120,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     // Metodo de creacion de user en la bd
     private void createUser(String email, String password, String userName) {
-        mDialog.show();
+        // mDialog.show();
         mAuthprovider.register(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -140,7 +139,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mUsersProvider.create(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            mDialog.dismiss();
+                            // mDialog.dismiss();
                             if (task.isSuccessful()){
 
                                 Toast.makeText(RegisterActivity.this, "Welcome!", Toast.LENGTH_LONG).show();
@@ -158,7 +157,7 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 }else{
-                    mDialog.dismiss();
+                    // mDialog.dismiss();
                     Toast.makeText(RegisterActivity.this, "Error creating user", Toast.LENGTH_LONG).show();
                 }
             }

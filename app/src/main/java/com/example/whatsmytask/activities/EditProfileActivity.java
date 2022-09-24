@@ -32,7 +32,6 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import dmax.dialog.SpotsDialog;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -47,7 +46,7 @@ public class EditProfileActivity extends AppCompatActivity {
     AuthProvider mAuth;
 
     //le muestra al usuario que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    // AlertDialog mDialog;
 
 
     Button mBtnEditProfile;
@@ -77,10 +76,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
         // cuadro de carga
-        mDialog = new SpotsDialog.Builder()
+        /** mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Loading")
-                .setCancelable(false).build();
+                .setCancelable(false).build();**/
         
         mBtnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void saveImageProfile(){
-        mDialog.show();
+        // mDialog.show();
         mImageProvider.save(EditProfileActivity.this, mImageFile)
                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -179,7 +178,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             });
 
                         }else{
-                            mDialog.dismiss();
+                            // mDialog.dismiss();
                             Toast.makeText(EditProfileActivity.this, "Error saving image", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -189,11 +188,11 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void updateInfo(User user){
 
-        if (mDialog.isShowing()){ mDialog.show(); }
+        // if (mDialog.isShowing()){ mDialog.show(); }
         mUserProvider.update(user).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                mDialog.dismiss();
+                // mDialog.dismiss();
                 if(task.isSuccessful()){
                     Toast.makeText(EditProfileActivity.this, "Data updated.", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);

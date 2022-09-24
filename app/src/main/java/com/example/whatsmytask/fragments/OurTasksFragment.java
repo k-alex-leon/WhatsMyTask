@@ -79,7 +79,7 @@ public class OurTasksFragment extends Fragment {
         mTaskProvider = new TaskProvider();
 
         mToolbar = mView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        // ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Our tasks");
         setHasOptionsMenu(true);
 

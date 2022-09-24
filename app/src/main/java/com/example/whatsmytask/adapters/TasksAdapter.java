@@ -110,8 +110,11 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
             long alarmTaskDate = taskU.getTaskAlarmDate();
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             Intent intent = new Intent(context, AlertReceiver.class);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
+            PendingIntent pendingIntent = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_IMMUTABLE);
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
+            }
 
 
         }
@@ -136,8 +139,14 @@ public class TasksAdapter extends FirestoreRecyclerAdapter<TaskU, TasksAdapter.V
                     long alarmTaskDate = taskU.getTaskAlarmDate();
                     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     Intent intent = new Intent(context, AlertReceiver.class);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, 0);
-                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
+
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S){
+
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTaskDate, pendingIntent);
+
+                    }
+
                     //si la tarea no es cumplida se enviara alerta
                     taskU.setId(taskId);
                     taskU.setTaskCheck(false);

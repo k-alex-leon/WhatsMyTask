@@ -5,13 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".fragments.OurTasksFragment">
 
-    <include layout="@layout/action_bar_toolbar"/>
+    <!-- <include layout="@layout/action_bar_toolbar"/> -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerOurTask"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background"
-        android:layout_marginTop="55dp"/>
+        android:background="@color/background"/>
 
 </FrameLayout>

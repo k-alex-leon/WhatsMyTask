@@ -93,7 +93,7 @@ public class DashboardFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         mToolbar = mView.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        //((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dashboard");
         setHasOptionsMenu(true);
 
@@ -167,7 +167,7 @@ public class DashboardFragment extends Fragment {
         allTask.add(new RadarEntry(numberTaskDone));
         allTask.add(new RadarEntry(numberTeamTask));
 
-        RadarDataSet radarDataSet = new RadarDataSet(allTask, "You're progress.");
+        RadarDataSet radarDataSet = new RadarDataSet(allTask, "Your progress.");
         radarDataSet.setColor(Color.parseColor("#1B7BCF"));
         radarDataSet.setLineWidth(2f);
         radarDataSet.setValueTextColor(Color.parseColor("#1B7BCF"));

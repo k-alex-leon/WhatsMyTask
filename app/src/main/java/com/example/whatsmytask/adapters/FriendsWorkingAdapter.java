@@ -101,12 +101,12 @@ public class FriendsWorkingAdapter extends RecyclerView.Adapter<FriendsWorkingAd
         TextView txtVFriendName , txtVTitleRemoveFriendDialog;
         Button btnCancelRemove, btnRemove;
 
-        imgVCloseRemove = view.findViewById(R.id.imgVCloseRemoveFriend);
-        cImgVFriend = view.findViewById(R.id.cImgVFriend);
-        txtVFriendName = view.findViewById(R.id.txtFriendName);
-        txtVTitleRemoveFriendDialog = view.findViewById(R.id.txtVTitleRemoveFriendDialog);
-        btnCancelRemove = view.findViewById(R.id.btnCancelRemove);
-        btnRemove = view.findViewById(R.id.btnRemoveFriend);
+        imgVCloseRemove = view.findViewById(R.id.imgVCloseFriendDialog);
+        cImgVFriend = view.findViewById(R.id.cImgVFriendDialog);
+        txtVFriendName = view.findViewById(R.id.txtVNameFriendDialog);
+        txtVTitleRemoveFriendDialog = view.findViewById(R.id.txtVTitleFriendDialog);
+        btnCancelRemove = view.findViewById(R.id.btnCancelFriendDialog);
+        btnRemove = view.findViewById(R.id.btnAcceptFriendDialog);
 
         txtVTitleRemoveFriendDialog.setText("REMOVE FROM TASK");
         Picasso.with(context).load(user.getImageProfile()).into(cImgVFriend);

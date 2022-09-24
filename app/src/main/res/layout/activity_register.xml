@@ -196,13 +196,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:layout_weight="1"
-                    android:gravity="bottom">
+                    android:gravity="center">
                     <!--
                         BUTTON LOGIN
                     -->
                     <Button
                         android:id="@+id/btnRegister"
                         android:backgroundTint="@color/light_blue"
+                        android:background="@drawable/custom_border"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Let's go!"

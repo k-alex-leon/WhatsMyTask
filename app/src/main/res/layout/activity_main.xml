@@ -19,8 +19,7 @@
             android:src="@drawable/whatsmytasklogo05"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:padding="20dp"
-            />
+            android:padding="20dp"/>
 
         <!--
          INPUT EMAIL
@@ -67,19 +66,20 @@
         <Button
             android:id="@+id/btnLogin"
             android:backgroundTint="@color/light_blue"
+            android:background="@drawable/custom_border"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Ready"
             android:textColor="@color/white"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            />
+            android:layout_marginRight="15dp"/>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/btnSignInGoogle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/custom_border"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"/>
@@ -100,15 +100,13 @@
         android:layout_marginRight="15dp"
         android:gravity="center"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="10dp"
-        >
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Don't have an account?"
-            android:textSize="16dp"
-            />
+            android:textSize="16dp"/>
 
         <TextView
             android:id="@+id/textViewRegister"
@@ -117,8 +115,7 @@
             android:text="Create one."
             android:layout_marginLeft="5dp"
             android:textStyle="bold"
-            android:textSize="17dp"
-            />
+            android:textSize="17dp"/>
 
     </LinearLayout>
 

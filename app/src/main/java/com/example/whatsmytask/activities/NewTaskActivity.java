@@ -26,18 +26,24 @@ import android.widget.Toast;
 import com.example.whatsmytask.R;
 
 import com.example.whatsmytask.adapters.TaskFriendAdapter;
+import com.example.whatsmytask.models.FCMBody;
+import com.example.whatsmytask.models.FCMResponse;
 import com.example.whatsmytask.models.TaskU;
 
 import com.example.whatsmytask.models.User;
 import com.example.whatsmytask.providers.AuthProvider;
 
 import com.example.whatsmytask.providers.FriendsProvider;
+import com.example.whatsmytask.providers.NotificationProvider;
 import com.example.whatsmytask.providers.TaskProvider;
+import com.example.whatsmytask.providers.TokenProvider;
 import com.example.whatsmytask.utils.ItemChecked;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
 
@@ -45,11 +51,24 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class NewTaskActivity extends AppCompatActivity{
+
+    TaskFriendAdapter mTaskFriendAdapter;
+    FriendsProvider mFriendsProvider;
+    TaskProvider mTaskProvider;
+    AuthProvider mAuthProvider;
+    TokenProvider mTokenProvider;
+    NotificationProvider mNotificationProvider;
 
     Button mBtnSaveTask;
     CircleImageView mBtnCircleButtonBackTask;
@@ -61,11 +80,6 @@ public class NewTaskActivity extends AppCompatActivity{
 
     ArrayList<String> friendsId;
 
-    TaskFriendAdapter mTaskFriendAdapter;
-    FriendsProvider mFriendsProvider;
-    TaskProvider mTaskProvider;
-    AuthProvider mAuthProvider;
-
     Calendar calendar = Calendar.getInstance();
 
     @Override
@@ -76,6 +90,8 @@ public class NewTaskActivity extends AppCompatActivity{
         mFriendsProvider = new FriendsProvider();
         mTaskProvider = new TaskProvider();
         mAuthProvider = new AuthProvider();
+        mTokenProvider = new TokenProvider();
+        mNotificationProvider = new NotificationProvider();
 
         friendsId = new ArrayList<>();
 
@@ -296,6 +312,7 @@ public class NewTaskActivity extends AppCompatActivity{
         if(friendsId.size() < 1){
             taskU.setFriendsTask(null);
         }else{
+            sendNotifications();
             friendsId.add(mAuthProvider.getUid());
             taskU.setFriendsTask(friendsId);
         }
@@ -309,7 +326,6 @@ public class NewTaskActivity extends AppCompatActivity{
                     // mDialog.dismiss();
                     clearForm();
                     finish();
-                    Toast.makeText(NewTaskActivity.this, "Task save", Toast.LENGTH_SHORT).show();
 
                 }else{
                     // mDialog.dismiss();
@@ -317,6 +333,47 @@ public class NewTaskActivity extends AppCompatActivity{
                 }
             }
         });
+    }
+
+    private void sendNotifications() {
+
+        for (int i = 0; i < friendsId.size(); i++) {
+            mTokenProvider.getToken(friendsId.get(i)).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()){
+                        if (documentSnapshot.contains("token")){
+                            String token = documentSnapshot.getString("token");
+
+                            Map<String, String> data = new HashMap<>();
+                            data.put("title", "New task!");
+                            data.put("body", mTitleTask.toUpperCase(Locale.ROOT));
+                            FCMBody body = new FCMBody(token, "high", "4500s", data);
+
+                            mNotificationProvider.sendNotification(body).enqueue(new Callback<FCMResponse>() {
+                                @Override
+                                public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                    if(response.body() != null){
+                                        if(response.body().getSuccess() != 1){
+                                            Toast.makeText(NewTaskActivity.this, "Error with message sent", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }else{
+                                        Toast.makeText(NewTaskActivity.this, "Error with message sent", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<FCMResponse> call, Throwable t) {
+
+                                }
+                            });
+                        }else{
+                            Toast.makeText(NewTaskActivity.this, "Token doesn't exist", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+            });
+        }
     }
 
 

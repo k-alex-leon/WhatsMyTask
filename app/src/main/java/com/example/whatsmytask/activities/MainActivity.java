@@ -34,7 +34,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import dmax.dialog.SpotsDialog;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     UsersProvider mUsersProvider;
     // spot aler dialog
     //le muestra al usuerio que debe esperar mientras termina un proceso
-    AlertDialog mDialog;
+    //AlertDialog mDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,10 +67,10 @@ public class MainActivity extends AppCompatActivity {
         mAuthProvider = new AuthProvider();
 
         // cuadro de carga
-        mDialog = new SpotsDialog.Builder()
+        /**mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Loading")
-                .setCancelable(false).build();
+                .setCancelable(false).build();**/
 
         // Para el inicio de sesion con google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -152,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        mDialog.show();
+        // mDialog.show();
         mAuthProvider.googleLogin(acct)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             startActivity(intent);
                         } else {
-                            mDialog.dismiss();
+                            // mDialog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w("ERROR", "signInWithCredential:failure", task.getException());
                             Toast.makeText(MainActivity.this, "Login error", Toast.LENGTH_SHORT).show();
@@ -187,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 //si existe el usuario ya se habia registrado
                 if (documentSnapshot.exists()){
-                    mDialog.dismiss();
+                    // mDialog.dismiss();
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     startActivity(intent);
                 }else{
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     mUsersProvider.create(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            mDialog.dismiss();
+                            // mDialog.dismiss();
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(MainActivity.this, CompleteProfileActivity.class);
                                 startActivity(intent);
@@ -224,13 +223,13 @@ public class MainActivity extends AppCompatActivity {
         if (!email.equals("") && !password.equals("")){
 
             // esto muestra el cuadro de carga
-            mDialog.show();
+            // mDialog.show();
             mAuthProvider.login(email,password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             //cierra el cuadro de carga
-                            mDialog.dismiss();
+                            // mDialog.dismiss();
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                                 // limpia historial de ventanas al iniciar sesion
